@@ -8,6 +8,7 @@ import Contact from "./components/Contact";
 import Login from "./components/Login";
 import Signup from "./components/Signup";
 import PageNotFound from "./components/PageNotFound";
+import Facilities from "./components/Facilities";
 
 const App = () => {
   return (
@@ -19,6 +20,7 @@ const App = () => {
           <Route path="/rooms" element={<Rooms />} />
           <Route path="/About" element={<About />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/facilities" element={<Facilities />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="login" element={<Login />} />
           <Route path="/*" element={<PageNotFound />} />
