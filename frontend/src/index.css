@@ -81,4 +81,10 @@
   .signup {
     background-color: var(--primary-color);
   }
+  nav .links li a {
+    @apply transition-all duration-300 rounded-sm ml-1 py-3 px-4;
+  }
+  nav .links li a:hover {
+    @apply bg-primary text-white;
+  }
 }

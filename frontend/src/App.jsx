@@ -2,19 +2,19 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router";
 import Home from "./components/Home";
 import Rooms from "./components/Rooms";
-import Navigation from "./components/Navigation";
 import About from "./components/About";
 import Contact from "./components/Contact";
 import Login from "./components/Login";
 import Signup from "./components/Signup";
 import PageNotFound from "./components/PageNotFound";
 import Facilities from "./components/Facilities";
+import Header from "./components/Header";
 
 const App = () => {
   return (
     <div>
       <Router>
-        <Navigation />
+        <Header />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/rooms" element={<Rooms />} />

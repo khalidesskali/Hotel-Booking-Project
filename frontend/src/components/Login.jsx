@@ -6,7 +6,7 @@ const Login = () => {
     <>
       <div
         className="bg-gray-100 flex items-center justify-center"
-        style={{ height: "calc(100vh - 40px)" }}
+        style={{ height: "calc(100vh - 72px)" }}
       >
         <form
           className="bg-white py-8 px-10 rounded-md shadow-md"
