@@ -8,7 +8,6 @@
   * {
     @apply border-border;
   }
-
   :root {
     --primary-color: #1261da;
     --white-color: #ffffff;
@@ -67,5 +66,19 @@
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
+  }
+  input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+  }
+  input {
+    padding: 8px 12px;
+    border: 1px solid #eee;
+    border-radius: 4px;
+    width: 350px;
+    transition: 0.3s;
+  }
+  .signup {
+    background-color: var(--primary-color);
   }
 }
