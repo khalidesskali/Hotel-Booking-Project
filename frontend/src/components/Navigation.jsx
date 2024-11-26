@@ -19,12 +19,12 @@ const Navigation = () => {
           <Link to="/contact">Contace Us</Link>
         </li>
       </ul>
-      <div className="auth flex gap-5 ">
-        <Button className="w-24">
-          <Link to="/signup">Signup</Link>
-        </Button>
+      <div className="auth flex gap-5">
         <Button className="w-24">
           <Link to="/login">Login</Link>
+        </Button>
+        <Button className="w-24">
+          <Link to="/signup">Signup</Link>
         </Button>
       </div>
     </nav>
