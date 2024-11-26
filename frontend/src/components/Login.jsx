@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 const Login = () => {
   return (
     <>
-      <div className=" h-screen flex items-center justify-center">
+      <div className="h-screen flex items-center justify-center">
         <form
           className="bg-white py-8 px-10 rounded-md shadow-md"
           onSubmit={(e) => e.preventDefault()}

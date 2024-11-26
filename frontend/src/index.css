@@ -10,6 +10,7 @@
   }
   :root {
     --primary-color: #1261da;
+    --secondary-color: #1261dae6;
     --white-color: #ffffff;
     --background: 0 0% 100%;
     --foreground: 224 71.4% 4.1%;
@@ -81,6 +82,14 @@
   .signup {
     background-color: var(--primary-color);
   }
+  header.before-scroll {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white;
+  }
+  header.after-scroll {
+    background-color: white;
+    color: black;
+  }
   nav .links li a {
     @apply transition-all duration-300 rounded-sm ml-1 py-3 px-4;
   }
@@ -88,6 +97,47 @@
     @apply text-primary;
   }
   .auth button:first-child {
-    @apply bg-white text-primary py-3 px-4 font-semibold;
+    @apply text-primary py-3 px-4 font-semibold;
+    background-color: transparent;
+  }
+  .hero-section {
+    background-image: url("./images/pexels-pixabay-302831.jpg");
+  }
+  .hero-section::before {
+    content: "";
+    background-color: rgba(0, 0, 0, 0.5);
+    @apply absolute top-0 left-0 w-full h-full;
+  }
+  .hero-content {
+    max-width: 800px;
+  }
+  .cta-button {
+    background-color: var(--primary-color);
+    padding: 15px 30px;
+  }
+  .cta-button:hover {
+    background-color: #1261dae6;
+  }
+  /* Hero section responsive */
+  @media (max-width: 768px) {
+    .hero-content h1 {
+      font-size: 2.5em;
+    }
+    .cta-button {
+      padding: 12px 25px;
+      font-size: 0.9em;
+    }
+  }
+  @media (max-width: 480px) {
+    .hero-content h1 {
+      font-size: 2em;
+    }
+    .hero-content p {
+      font-size: 0.9em;
+    }
+    .cta-button {
+      padding: 10px 20px;
+      font-size: 0.8em;
+    }
   }
 }

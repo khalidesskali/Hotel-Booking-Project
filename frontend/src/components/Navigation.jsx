@@ -16,7 +16,7 @@ const Navigation = () => {
           <Link to="about">About</Link>
         </li>
         <li>
-          <Link to="/contact">Contace Us</Link>
+          <Link to="/contact">Contact Us</Link>
         </li>
       </ul>
       <div className="auth flex gap-5">

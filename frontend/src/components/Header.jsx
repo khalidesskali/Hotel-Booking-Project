@@ -13,9 +13,9 @@ const Header = () => {
   }, []);
 
   return (
-    <div
-      className={`fixed w-full transition-all duration-300 ${
-        sticky ? "bg-white" : ""
+    <header
+      className={`fixed z-10 w-full transition-all duration-300 ${
+        sticky ? "after-scroll" : "before-scroll "
       }`}
     >
       <div className="container mx-auto flex items-center justify-between p-4">
@@ -27,7 +27,7 @@ const Header = () => {
         </Link>
         <Navigation />
       </div>
-    </div>
+    </header>
   );
 };
 
