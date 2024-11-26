@@ -90,7 +90,4 @@
   .auth button:first-child {
     @apply bg-white text-primary py-3 px-4 font-semibold;
   }
-  .hero {
-    height: calc(100vh - 74px);
-  }
 }

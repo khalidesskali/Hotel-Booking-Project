@@ -15,10 +15,7 @@ const Signup = () => {
   };
 
   return (
-    <div
-      className="bg-gray-100 flex items-center justify-center"
-      style={{ height: "calc(100vh - 72px)" }}
-    >
+    <div className=" h-screen flex items-center justify-center">
       <form
         className="bg-white py-8 px-10 rounded-md shadow-md"
         onSubmit={(e) => e.preventDefault()}

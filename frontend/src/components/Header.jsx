@@ -1,10 +1,23 @@
 import { Link } from "react-router-dom";
 import logo from "../images/logo.png";
 import Navigation from "./Navigation";
+import { useEffect, useState } from "react";
 
 const Header = () => {
+  const [sticky, setSticky] = useState(false);
+
+  useEffect(() => {
+    window.addEventListener("scroll", () => {
+      window.scrollY > 10 ? setSticky(true) : setSticky(false);
+    });
+  }, []);
+
   return (
-    <div className="shadow-md">
+    <div
+      className={`fixed w-full transition-all duration-300 ${
+        sticky ? "bg-white" : ""
+      }`}
+    >
       <div className="container mx-auto flex items-center justify-between p-4">
         <Link className="logo flex items-center gap-2" to="/">
           <img src={logo} alt="logo" className="w-10" />
