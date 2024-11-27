@@ -40,7 +40,7 @@ const FeaturedRooms = ({ title, description }) => {
               <img
                 src={room.image}
                 alt={room.name}
-                className="block mb-4 rounded-md w-full h-"
+                className="room-image block mb-4 rounded-md w-full h-"
               />
               <h3 className="text-xl font-semibold">{room.name}</h3>
               <p className=" text-gray-600 text-sm my-2">{room.description}</p>
