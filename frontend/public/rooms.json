@@ -1,0 +1,70 @@
+[
+  {
+    "id": 1,
+    "name": "Deluxe Suite",
+    "description": "A luxurious suite with ocean view, king-size bed, and private balcony.",
+    "price": 250,
+    "image": "../src/images/deluxe-suite.jpg",
+    "amenities": ["Wi-Fi", "TV", "Air Conditioning", "Room Service", "Mini Bar"]
+  },
+  {
+    "id": 2,
+    "name": "Standard Room",
+    "description": "A comfortable room with all basic amenities for a pleasant stay.",
+    "price": 120,
+    "image": "../src/images/standard-room.jpg",
+    "amenities": ["Wi-Fi", "TV", "Air Conditioning"]
+  },
+  {
+    "id": 3,
+    "name": "Family Room",
+    "description": "Spacious room perfect for families with kids, includes bunk beds and a play area.",
+    "price": 180,
+    "image": "../src/images/family-room.jpg",
+    "amenities": ["Wi-Fi", "TV", "Air Conditioning", "Crib", "Kids Play Area"]
+  },
+  {
+    "id": 4,
+    "name": "Presidential Suite",
+    "description": "An opulent suite with a private jacuzzi, personal butler, and stunning views.",
+    "price": 500,
+    "image": "../src/images/Penthouse-Suite.jpeg",
+    "amenities": [
+      "Wi-Fi",
+      "TV",
+      "Jacuzzi",
+      "Personal Butler",
+      "Private Balcony"
+    ]
+  },
+  {
+    "id": 5,
+    "name": "Single Room",
+    "description": "A cozy single room ideal for solo travelers.",
+    "price": 90,
+    "image": "../src/images/single-room.webp",
+    "amenities": ["Wi-Fi", "TV", "Air Conditioning"]
+  },
+  {
+    "id": 6,
+    "name": "Double Room",
+    "description": "Perfect for couples, featuring a queen-size bed and city view.",
+    "price": 140,
+    "image": "../src/images/double-room.jpg",
+    "amenities": ["Wi-Fi", "TV", "Air Conditioning", "City View"]
+  },
+  {
+    "id": 7,
+    "name": "Penthouse Suite",
+    "description": "A luxurious top-floor suite with private elevator access and stunning panoramic views.",
+    "price": 700,
+    "image": "../src/images/Penthouse-Suite.jpeg",
+    "amenities": [
+      "Wi-Fi",
+      "TV",
+      "Private Elevator",
+      "Panoramic View",
+      "Jacuzzi"
+    ]
+  }
+]
