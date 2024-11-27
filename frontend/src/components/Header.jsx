@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import logo from "../images/logo.png";
 import Navigation from "./Navigation";
 import { useEffect, useState } from "react";
@@ -7,15 +7,20 @@ const Header = () => {
   const [sticky, setSticky] = useState(false);
 
   useEffect(() => {
-    window.addEventListener("scroll", () => {
+    const handleScroll = () => {
       window.scrollY > 10 ? setSticky(true) : setSticky(false);
-    });
+    };
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
   }, []);
 
   return (
     <header
       className={`fixed z-10 w-full transition-all duration-300 ${
-        sticky ? "after-scroll" : "before-scroll "
+        sticky ? "after-scroll" : ""
       }`}
     >
       <div className="container mx-auto flex items-center justify-between p-4">
