@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Button } from "./ui/button";
+import { Link } from "react-router-dom";
 
 const FeaturedRooms = ({ title, description }) => {
   const [rooms, setRooms] = useState([]);
@@ -27,9 +28,11 @@ const FeaturedRooms = ({ title, description }) => {
   return (
     <section className="py-20 bg-gray-50">
       <div className="container mx-auto px-4">
-        <div className="heading mb-20 max-md:text-center">
+        <div className="heading mb-20 ">
           <h2 className="text-3xl font-semibold text-center mb-3">{title}</h2>
-          <p className="text-gray-600 max-w-2xl mx-auto ">{description}</p>
+          <p className="text-gray-600 max-w-2xl mx-auto text-center">
+            {description}
+          </p>
         </div>
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {rooms.slice(0, 6).map((room) => (
@@ -40,10 +43,12 @@ const FeaturedRooms = ({ title, description }) => {
               <img
                 src={room.image}
                 alt={room.name}
-                className="room-image block mb-4 rounded-md w-full h-"
+                className="room-image block mb-4 rounded-md w-full"
               />
               <h3 className="text-xl font-semibold">{room.name}</h3>
-              <p className=" text-gray-600 text-sm my-2">{room.description}</p>
+              <p className=" text-gray-600 text-sm h-10 my-2">
+                {room.description}
+              </p>
               <span className="block text-primary font-bold text-lg mb-4">
                 ${room.price.toFixed(2)}
               </span>
@@ -52,6 +57,11 @@ const FeaturedRooms = ({ title, description }) => {
               </Button>
             </div>
           ))}
+        </div>
+        <div className="flex items-center justify-center mt-14 w-full">
+          <Button>
+            <Link to="/rooms">Explore More</Link>
+          </Button>
         </div>
       </div>
     </section>
