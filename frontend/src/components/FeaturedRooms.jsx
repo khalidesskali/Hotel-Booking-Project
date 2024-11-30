@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 const FeaturedRooms = ({ title, description }) => {
   const [rooms, setRooms] = useState([]);
 
-  //   Fetching local data
+  //  Fetching local data
   useEffect(() => {
     const fetchRooms = async () => {
       try {
@@ -38,7 +38,7 @@ const FeaturedRooms = ({ title, description }) => {
           {rooms.slice(0, 6).map((room) => (
             <div
               key={room.id}
-              className="bg-white shadow-md p-5 rounded-lg overflow-hidden  transform transition-transform duration-300 hover:scale-105 hover:shadow-lg"
+              className="bg-white shadow-md p-5 rounded-sm overflow-hidden transition-transform duration-300  hover:shadow-lg"
             >
               <img
                 src={room.image}
