@@ -144,4 +144,8 @@
   .room-image {
     height: 250px;
   }
+  /* CTA */
+  .cta {
+    background-image: url("./images/photo-1520250497591-112f2f40a3f4.avif");
+  }
 }

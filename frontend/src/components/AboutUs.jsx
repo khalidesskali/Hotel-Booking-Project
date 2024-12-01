@@ -15,14 +15,14 @@ const AboutUs = ({ title, description }) => {
         </div>
         <div className="relative flex flex-col md:flex-row items-center md:items-start gap-8 md:gap-16">
           <div className="md:w-1/2  flex flex-col   text-center md:text-left">
-            <div className="md:w-1/2 text-center md:text-left  absolute top-1/2 -translate-y-1/2">
+            <div className="md:w-1/2 w-full text-center md:text-left  md:absolute md:top-1/2 md:-translate-y-1/2">
               <h3 className="text-4xl  font-bold text-gray-800 mb-5">
                 Welcome to{" "}
                 <span>
                   Stay<span className="text-primary">H</span>ome
                 </span>
               </h3>
-              <p className="text-gray-600 leading-relaxed mb-6 w-80">
+              <p className="max-md:mx-auto text-gray-600 leading-relaxed mb-6 w-80">
                 Founded with a passion for hospitality, StayHome has been a
                 haven for travelers seeking luxury, comfort, and memorable
                 experiences. Nestled in the heart of Marrakech, our hotel
@@ -33,7 +33,7 @@ const AboutUs = ({ title, description }) => {
               </Button>
             </div>
           </div>
-          <div className="md:w-1/2">
+          <div className="md:w-1/2 -order-1 md:order-1">
             <img
               src={hotel}
               alt="About us visual"

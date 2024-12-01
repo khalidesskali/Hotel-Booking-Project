@@ -3,6 +3,7 @@ import Hero from "./Hero";
 import FeaturedRooms from "./FeaturedRooms";
 import Amenities from "./Amenities";
 import AboutUs from "./AboutUs";
+import CTA from "./CTA";
 
 const Home = () => {
   return (
@@ -22,6 +23,7 @@ const Home = () => {
         title="Your Home Away From Home"
         description="At StayHome, we strive to create an experience that feels as comforting as home but with the indulgence of a getaway. Relax, rejuvenate, and relish every moment with us."
       />
+      <CTA />
     </>
   );
 };
