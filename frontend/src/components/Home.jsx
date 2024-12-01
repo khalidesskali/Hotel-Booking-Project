@@ -4,6 +4,8 @@ import FeaturedRooms from "./FeaturedRooms";
 import Amenities from "./Amenities";
 import AboutUs from "./AboutUs";
 import CTA from "./CTA";
+import WhyChooseUs from "./WhyChooseUs";
+import ContactSection from "./ContactSection";
 
 const Home = () => {
   return (
@@ -24,6 +26,15 @@ const Home = () => {
         description="At StayHome, we strive to create an experience that feels as comforting as home but with the indulgence of a getaway. Relax, rejuvenate, and relish every moment with us."
       />
       <CTA />
+      <WhyChooseUs
+        title="Why Stay With Us?"
+        description="We offer the best experiences to make your stay unforgettable."
+      />
+      <ContactSection
+        title="Get in Touch"
+        description=" We’d love to hear from you! Feel free to reach out for inquiries or
+            more information."
+      />
     </>
   );
 };

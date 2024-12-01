@@ -26,7 +26,7 @@ const FeaturedRooms = ({ title, description }) => {
   }, []);
 
   return (
-    <section className="py-20 bg-gray-50">
+    <section className="py-20 bg-muted">
       <div className="container mx-auto px-4">
         <div className="heading mb-20 ">
           <h2 className="text-3xl font-semibold text-center mb-3">{title}</h2>

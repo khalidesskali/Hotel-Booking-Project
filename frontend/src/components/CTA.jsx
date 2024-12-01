@@ -14,12 +14,7 @@ const CTA = () => {
         </p>
         <div className="space-x-4">
           <Button onClick={() => location("/rooms")}>Explore Rooms</Button>
-          <Button
-            onClick={() => location("/facilities")}
-            className="bg-white text-black hover:bg-gray-200 transition-colors duration-300"
-          >
-            Book Now
-          </Button>
+          <Button onClick={() => location("/facilities")}>Book Now</Button>
         </div>
       </div>
     </section>
