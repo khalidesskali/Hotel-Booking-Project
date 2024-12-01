@@ -6,6 +6,7 @@ import AboutUs from "./AboutUs";
 import CTA from "./CTA";
 import WhyChooseUs from "./WhyChooseUs";
 import ContactSection from "./ContactSection";
+import Footer from "./Footer";
 
 const Home = () => {
   return (
@@ -35,6 +36,7 @@ const Home = () => {
         description=" We’d love to hear from you! Feel free to reach out for inquiries or
             more information."
       />
+      <Footer />
     </>
   );
 };
