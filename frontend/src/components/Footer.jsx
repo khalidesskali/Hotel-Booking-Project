@@ -78,7 +78,7 @@ const Footer = () => {
         className="text-center text-gray-100 mt-4 pt-4 border-t"
         style={{ borderColor: "#444" }}
       >
-        <p>&copy; 2024 Your Hotel Name. All Rights Reserved.</p>
+        <p>&copy; 2024 StayHome. All Rights Reserved.</p>
       </div>
     </footer>
   );
