@@ -18,8 +18,8 @@ const Contact = () => {
           }}
         ></div>
         <div className="relative z-10 max-w-4xl mx-auto text-center">
-          <h1 className="text-4xl font-bold mb-4">Get in Touch</h1>
-          <p className="text-lg">
+          <h1 className="text-5xl font-extrabold mb-6">Get in Touch</h1>
+          <p className="text-xl max-w-2xl mx-auto mb-4">
             We'd love to hear from you! Reach out to us with any questions or
             feedback.
           </p>
