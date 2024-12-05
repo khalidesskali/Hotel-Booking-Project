@@ -15,16 +15,18 @@ const App = () => {
     <div>
       <Router>
         <Header />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/rooms" element={<Rooms />} />
-          <Route path="/About" element={<About />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/facilities" element={<Facilities />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="login" element={<Login />} />
-          <Route path="/*" element={<PageNotFound />} />
-        </Routes>
+        <div style={{ marginTop: "72px" }}>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/rooms" element={<Rooms />} />
+            <Route path="/About" element={<About />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/facilities" element={<Facilities />} />
+            <Route path="/signup" element={<Signup />} />
+            <Route path="login" element={<Login />} />
+            <Route path="/*" element={<PageNotFound />} />
+          </Routes>
+        </div>
       </Router>
     </div>
   );

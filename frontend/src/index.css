@@ -79,6 +79,9 @@
     width: 350px;
     transition: 0.3s;
   }
+  textarea:focus {
+    outline: none;
+  }
   .signup {
     background-color: var(--primary-color);
   }
