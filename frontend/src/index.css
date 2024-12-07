@@ -82,6 +82,9 @@
   textarea:focus {
     outline: none;
   }
+  .error {
+    color: red;
+  }
   .signup {
     background-color: var(--primary-color);
   }
