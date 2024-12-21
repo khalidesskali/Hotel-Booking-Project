@@ -16,6 +16,7 @@ return new class extends Migration {
             $table->decimal('price_per_night', 10, 2);
             $table->boolean('availability')->default(true);
             $table->text('description')->nullable();
+            $table->string('image');
             $table->timestamps();
         });
     }
