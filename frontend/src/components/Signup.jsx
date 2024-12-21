@@ -1,42 +1,27 @@
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
-function validateForm(data) {
+const validateForm = (formData) => {
   const errors = {};
-  const regEx = {
-    name: /^[a-zA-Z]{2,20}$/,
-    email: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,20}$/,
-    password: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,20}$/,
-  };
 
-  if (!data.firstName.trim()) {
-    errors.firstName = "Please fill out the field";
-  } else if (!regEx.name.test(data.firstName)) {
-    errors.firstName = "Invalid first name (2, 20 letters)";
+  if (!formData.firstName.trim()) {
+    errors.firstName = true;
   }
-
-  if (!data.lastName.trim()) {
-    errors.lastName = "Please fill out the field";
-  } else if (!regEx.name.test(data.lastName)) {
-    errors.lastName = "Invalid last name (2, 20 letters)";
+  if (!formData.lastName.trim()) {
+    errors.lastName = true;
   }
-
-  if (!data.email.trim()) {
-    errors.email = "Please fill out the field";
-  } else if (!regEx.name.test(data.email)) {
-    errors.email = "Invalid email address";
+  if (!/^[\w.-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,}$/.test(formData.email)) {
+    errors.email = true;
   }
-
-  if (!data.password.trim()) {
-    errors.password = "Please fill out the field";
-  } else if (!regEx.name.test(data.password)) {
-    errors.password =
-      "Password must contain at least 8 characters (one number, one letter)";
+  if (!/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/.test(formData.password)) {
+    errors.password = true;
   }
 
   return errors;
-}
+};
 
 const Signup = () => {
   const [formData, setFormData] = useState({
@@ -47,15 +32,52 @@ const Signup = () => {
   });
 
   const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const location = useNavigate();
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+
+    setFormData({ ...formData, [name]: value });
+
+    if (errors[name]) {
+      const updatedErrors = { ...errors };
+      delete updatedErrors[name];
+      setErrors(updatedErrors);
+    }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
     const errors = validateForm(formData);
     setErrors(errors);
+
+    if (Object.keys(errors).length > 0) {
+      return;
+    }
+
+    // Set loading to true when submission starts
+    setLoading(true);
+
+    try {
+      const response = await submitFormData(formData);
+      console.log(response.data);
+      setLoading(false);
+      setSuccessMessage("Signup successful! Redirecting to login...");
+      setTimeout(() => location("/login"), 2000);
+    } catch (error) {
+      console.error("an error has occured", error);
+      setLoading(false);
+      setErrorMessage("There was an error processing your request.");
+    }
+  };
+
+  const submitFormData = async (data) => {
+    const response = await axios.post("http://localhost:8000/api/signup", data);
+    return response;
   };
 
   return (
@@ -80,7 +102,9 @@ const Signup = () => {
             id="first-name"
             onChange={handleChange}
           />
-          {errors.firstName && <div className="error">{errors.firstName}</div>}
+          {errors.firstName && (
+            <div className="error">First name is required</div>
+          )}
         </div>
         <div className="mb-4">
           <label htmlFor="last-name" className="mb-1 block">
@@ -95,7 +119,9 @@ const Signup = () => {
             id="last-name"
             onChange={handleChange}
           />
-          {errors.lastName && <div className="error">{errors.lastName}</div>}
+          {errors.lastName && (
+            <div className="error">Last name is required</div>
+          )}
         </div>
         <div className="mb-4">
           <label htmlFor="mail" className="block mb-1">
@@ -110,7 +136,7 @@ const Signup = () => {
             id="mail"
             onChange={handleChange}
           />
-          {errors.email && <div className="error">{errors.email}</div>}
+          {errors.email && <div className="error">Invalid email address</div>}
         </div>
         <div className="mb-5">
           <label htmlFor="pass" className="mb-2 block">
@@ -127,17 +153,56 @@ const Signup = () => {
           />
           {errors.password && (
             <div className="error">
-              Password must contain at least 8 characters, <br /> one letter and
+              password must contain at least 8 characters, <br /> one letter and
               one number
             </div>
           )}
         </div>
-        <Button className="w-full block bg-primary mb-2" type="submit">
+        <Button
+          className="w-full block bg-primary mb-2"
+          type="submit"
+          disabled={loading}
+        >
           Signup
         </Button>
+        {loading && (
+          <div className="flex items-center justify-center mt-4">
+            {" "}
+            <svg
+              className="animate-spin h-5 w-5 text-indigo-500"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              {" "}
+              <circle
+                className="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                strokeWidth="4"
+              ></circle>{" "}
+              <path
+                className="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+              ></path>{" "}
+            </svg>{" "}
+            <span className="ml-2 text-indigo-500">Loading...</span>{" "}
+          </div>
+        )}{" "}
+        {successMessage && (
+          <p className="mt-4 text-green-500">{successMessage}</p>
+        )}{" "}
+        {errorMessage && <p className="mt-4 text-red-500">{errorMessage}</p>}
         <span className="block mx-auto font-medium w-fit text-sm ">
           already have an account?{"  "}
-          <Link className="text-primary underline" to="/login">
+          <Link
+            className="text-primary underline"
+            to="/login"
+            disabled={loading}
+          >
             Login
           </Link>
         </span>

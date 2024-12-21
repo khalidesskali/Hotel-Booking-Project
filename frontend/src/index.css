@@ -84,6 +84,7 @@
   }
   .error {
     color: red;
+    @apply text-sm mt-1;
   }
   .signup {
     background-color: var(--primary-color);
