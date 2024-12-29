@@ -1,22 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { Button } from "./ui/button";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 const FeaturedRooms = ({ title, description }) => {
   const [rooms, setRooms] = useState([]);
 
-  //  Fetching local data
+  //  Fetching local data with Axios
   useEffect(() => {
     const fetchRooms = async () => {
       try {
-        const response = await fetch("/rooms.json");
-
-        if (!response.ok) {
-          throw new Error("Fetching rooms data failed");
-        }
-
-        const data = await response.json();
-        setRooms(data);
+        const response = await axios.get("http://127.0.0.1:8000/api/rooms");
+        console.log(response.data);
+        setRooms(response.data.data);
       } catch (error) {
         console.error("An error has occurred:", error);
       }
@@ -41,11 +37,11 @@ const FeaturedRooms = ({ title, description }) => {
               className="bg-white shadow-md p-5 rounded-sm overflow-hidden transition-transform duration-300  hover:shadow-lg"
             >
               <img
-                src={room.image}
-                alt={room.name}
+                src={room.imageSrc}
+                alt={room.roomType}
                 className="room-image block mb-4 rounded-md w-full"
               />
-              <h3 className="text-xl font-semibold">{room.name}</h3>
+              <h3 className="text-xl font-semibold">{room.roomType}</h3>
               <p className=" text-gray-600 text-sm h-10 my-2">
                 {room.description}
               </p>
