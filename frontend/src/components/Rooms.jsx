@@ -26,7 +26,7 @@ const Rooms = () => {
         <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4 mr-4 ">
           <label>Room Type</label>
           <select
-            className="cursor-pointer rounded-sm focus:outline-none"
+            className="p-2 cursor-pointer rounded-sm focus:outline-none"
             style={{ border: "1px solid #eee" }}
             value={roomType}
             onChange={(e) => setRoomType(e.target.value)}
