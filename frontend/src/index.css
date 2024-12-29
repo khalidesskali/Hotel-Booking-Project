@@ -79,6 +79,9 @@
     width: 350px;
     transition: 0.3s;
   }
+  input[type="date"] {
+    width: auto;
+  }
   textarea:focus {
     outline: none;
   }
@@ -154,5 +157,8 @@
   /* CTA */
   .cta {
     background-image: url("./images/photo-1520250497591-112f2f40a3f4.avif");
+  }
+  .search-input:focus + svg {
+    @apply hidden;
   }
 }
