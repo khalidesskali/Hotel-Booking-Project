@@ -1,7 +1,7 @@
 import React from "react";
 
-const Facilities = () => {
+const Offers = () => {
   return <div></div>;
 };
 
-export default Facilities;
+export default Offers;

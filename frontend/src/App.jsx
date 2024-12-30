@@ -7,7 +7,7 @@ import Contact from "./components/Contact";
 import Login from "./components/Login";
 import Signup from "./components/Signup";
 import PageNotFound from "./components/PageNotFound";
-import Facilities from "./components/Facilities";
+import Offers from "./components/Offers";
 import Header from "./components/Header";
 
 const App = () => {
@@ -15,13 +15,13 @@ const App = () => {
     <div>
       <Router>
         <Header />
-        <div style={{ marginTop: "72px" }}>
+        <div className="mt-16">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/rooms" element={<Rooms />} />
             <Route path="/About" element={<About />} />
             <Route path="/contact" element={<Contact />} />
-            <Route path="/facilities" element={<Facilities />} />
+            <Route path="/offers" element={<Offers />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/login" element={<Login />} />
             <Route path="/*" element={<PageNotFound />} />
