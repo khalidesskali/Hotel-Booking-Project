@@ -122,12 +122,32 @@
   nav .links li a:hover {
     @apply ml-2 text-primary;
   }
-  nav .nav {
-    right: -350px;
-  }
   .auth button:first-child {
     @apply text-primary py-3 px-4 font-semibold;
     background-color: transparent;
+  }
+  @media (min-width: 1025px) {
+    nav .nav .links li a {
+      margin: 0;
+    }
+    nav .nav {
+      all: unset;
+      @apply right-0 relative flex flex-row w-auto h-auto p-0
+        items-center justify-between;
+    }
+    nav .links {
+      @apply flex-row justify-center items-center m-0 flex-1;
+    }
+    nav .links li a::before {
+      height: 3px;
+      width: 0px;
+      left: 50%;
+      transform: translateX(-50%);
+      top: 37px;
+    }
+    nav .links li a:hover::before {
+      width: 15px;
+    }
   }
   .hero-section {
     background-image: url("./images/pexels-pixabay-302831.jpg");
