@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { IoIosSearch } from "react-icons/io";
 import { Button } from "./ui/button";
 import axios from "axios";
+import { useNavigate } from "react-router";
 
 const Rooms = () => {
   const [search, setSearch] = useState("");
@@ -10,6 +11,8 @@ const Rooms = () => {
   const [endDate, setEndDate] = useState("");
   const [rooms, setRooms] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchRooms = async () => {
@@ -116,7 +119,9 @@ const Rooms = () => {
                         ${room.price.toFixed(2)}
                       </span>
                     </span>
-                    <Button>Book</Button>
+                    <Button onClick={() => navigate(`/rooms/${room.id}`)}>
+                      Book
+                    </Button>
                   </div>
                 </div>
               </li>
