@@ -27,8 +27,11 @@ const Rooms = () => {
     fetchRooms();
   }, []);
 
+  const filteredRooms = rooms.filter((room) =>
+    room.roomType.toLowerCase().includes(search.toLowerCase())
+  );
+
   const today = new Date().toISOString().split("T")[0];
-  let roomsLength = rooms.length;
 
   return (
     <div className="container mx-auto px-4">
@@ -95,7 +98,7 @@ const Rooms = () => {
                 </div>
               </li>
             ))
-          : rooms.map((room) => (
+          : filteredRooms.map((room) => (
               <li key={room.id} className="bg-white p-2 rounded-xl">
                 <img
                   src={room.imageSrc}
