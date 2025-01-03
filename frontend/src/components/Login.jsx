@@ -1,25 +1,61 @@
 import { Button } from "@/components/ui/button";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 
+function validateData(data) {
+  const errors = {};
+
+  if (!/^[\w.-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,}$/.test(data.email)) {
+    errors.email = true;
+  }
+  if (data.password === "") {
+    errors.password = true;
+  }
+
+  return errors;
+}
+
 const Login = () => {
+  const [formData, setFormData] = useState({ email: "", password: "" });
+  const [errors, setErrors] = useState({ email: false, password: false });
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    setErrors(validateData(formData));
+
+    if (Object.keys(errors).length > 0) {
+      return;
+    }
+  };
+
   return (
     <>
       <div className="h-screen flex items-center justify-center">
         <form
           className="bg-white py-8 px-10 rounded-md shadow-md"
-          onSubmit={(e) => e.preventDefault()}
+          onSubmit={handleSubmit}
         >
-          <h2 className="font-semibold text-4xl text-center mb-5">StayHome</h2>
+          <h2 className="font-semibold text-4xl text-center mb-5">
+            Stay<span className="text-primary">H</span>ome
+          </h2>
           <div className="mb-4">
             <label htmlFor="mail" className="block mb-1">
               Email
             </label>
             <input
               type="email"
+              onChange={handleChange}
               placeholder="Enter your Email"
               className="focus-visible:ring-0 focus-visible:ring-offset-0"
               id="mail"
+              name="email"
             />
+            {errors.email && <div className="error">Invalid email address</div>}
           </div>
           <div className="mb-5">
             <label htmlFor="pass" className="mb-2 block">
@@ -27,10 +63,15 @@ const Login = () => {
             </label>
             <input
               type="password"
+              onChange={handleChange}
               placeholder="Entery your password"
               className="focus-visible:ring-0 focus-visible:ring-offset-0"
               id="pass"
+              name="password"
             />
+            {errors.password && (
+              <div className="error">Password is required</div>
+            )}
           </div>
           <Button className="w-full block bg-primary mb-2" type="submit">
             Login
