@@ -11,4 +11,24 @@ class RoomsController extends Controller {
 
         return RoomResource::collection($rooms);
     }
+
+    public function show($id)  {
+        $room = Room::find($id);
+    
+        if (!$room) {
+            return response()->json(['message' => 'Room not found'], 404);
+        }
+
+        $roomCamelCase = [
+            'id' => $room->id,
+            'roomNumber' => (int) $room->room_number,
+            'roomType' => $room->room_type,
+            'imageSrc' => $room->image,
+            'price' => (float) $room->price_per_night,
+            'description' => $room->description,
+            'availability' => (boolean) $room->availability
+        ];
+
+        return response()->json($roomCamelCase, 200);
+    }
 }
