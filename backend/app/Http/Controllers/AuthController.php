@@ -15,9 +15,17 @@ class AuthController extends Controller
             'password' => 'required',
         ]);
 
+        // Check if the email exists
+        $user = User::where('email', $request->email)->first();
+        if (!$user) {
+            throw ValidationException::withMessages(([
+                'email' => 'The provided email is incorrect',
+            ]));
+        }
+
         if (!Auth::attempt(['email' => $validatedData['email'], 'password' => $validatedData['password']])) {
             throw ValidationException::withMessages([
-                'email' => ['The provided credentials are incorrect.'],
+                'password' => ['The provided password is incorrect.'],
             ]);
         }
 
