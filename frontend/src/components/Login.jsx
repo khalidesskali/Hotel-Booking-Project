@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 function validateData(data) {
   const errors = {};
@@ -18,12 +19,13 @@ function validateData(data) {
 const Login = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [errors, setErrors] = useState({ email: false, password: false });
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     setErrors(validateData(formData));
@@ -31,6 +33,30 @@ const Login = () => {
     if (Object.keys(errors).length > 0) {
       return;
     }
+
+    setLoading(true);
+
+    try {
+      const response = await login(formData);
+      console.log(response.data);
+
+      // Store the token in localStorage
+      localStorage.setItem("auth_token", response.data.token);
+
+      setLoading(false);
+    } catch (e) {
+      console.error("An error has occurred", e);
+      setLoading(false);
+
+      if (e.response && e.response.status === 422) {
+        setErrors({ ...errors, server: e.response.data.message });
+      }
+    }
+  };
+
+  const login = async (data) => {
+    const response = await axios.post("http://localhost:8000/api/login", data);
+    return response;
   };
 
   return (
@@ -82,6 +108,7 @@ const Login = () => {
               Signup
             </Link>
           </span>
+          {loading && <div>Loading...</div>}
         </form>
       </div>
     </>
