@@ -49,10 +49,13 @@ const Navigation = () => {
           </li>
         </ul>
         <div className="auth flex justify-center gap-8">
-          <Button className="w-24">
+          <Button className="w-24 " variant="outline">
             <Link to="/login">Login</Link>
           </Button>
-          <Button className="w-24">
+          <Button
+            className="w-24 hover:text-white hover:bg-primary duration-300"
+            variant="outline"
+          >
             <Link to="/signup">Signup</Link>
           </Button>
         </div>
