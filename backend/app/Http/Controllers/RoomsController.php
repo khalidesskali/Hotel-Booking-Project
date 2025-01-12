@@ -26,7 +26,11 @@ class RoomsController extends Controller {
             'imageSrc' => $room->image,
             'price' => (float) $room->price_per_night,
             'description' => $room->description,
-            'availability' => (boolean) $room->availability
+            'availability' => (boolean) $room->availability,
+            'bath' => (int) $room->baths,
+            'area' => (int) $room->area,
+            'guests' => (int) $room->guests,
+            'bathroom' => (int) $room->bathrooms
         ];
 
         return response()->json($roomCamelCase, 200);
