@@ -77,28 +77,28 @@ const Book = () => {
                   <div className="flex flex-col items-center gap-2">
                     <span className="text-gray-600">Beds</span>
                     <div className="flex gap-2 text-sm">
-                      <span>2</span>
+                      <span>{room.bed}</span>
                       <LiaBedSolid className="text-xl" />
                     </div>
                   </div>
                   <div className="flex flex-col items-center gap-2">
                     <span className="text-gray-600">Area</span>
                     <div className="flex gap-2 text-sm">
-                      <span>60</span>
+                      <span>{room.area}</span>
                       <MdOutlineSquareFoot className="text-xl" />
                     </div>
                   </div>
                   <div className="flex flex-col items-center gap-2">
                     <span className="text-gray-600">Guests</span>
                     <div className="flex gap-2 text-sm">
-                      <span>4</span>
+                      <span>{room.guests}</span>
                       <FaUserFriends className="text-xl" />
                     </div>
                   </div>
                   <div className="flex flex-col items-center gap-2">
                     <span className="text-gray-600">Bathrooms</span>
                     <div className="flex gap-2 text-sm">
-                      <span>1</span>
+                      <span>{room.bathroom}</span>
                       <FaBath className="text-xl" />
                     </div>
                   </div>
