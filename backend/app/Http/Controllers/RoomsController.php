@@ -27,7 +27,7 @@ class RoomsController extends Controller {
             'price' => (float) $room->price_per_night,
             'description' => $room->description,
             'availability' => (boolean) $room->availability,
-            'bath' => (int) $room->baths,
+            'bed' => (int) $room->baths,
             'area' => (int) $room->area,
             'guests' => (int) $room->guests,
             'bathroom' => (int) $room->bathrooms,
