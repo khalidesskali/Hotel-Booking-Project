@@ -30,7 +30,8 @@ class RoomsController extends Controller {
             'bath' => (int) $room->baths,
             'area' => (int) $room->area,
             'guests' => (int) $room->guests,
-            'bathroom' => (int) $room->bathrooms
+            'bathroom' => (int) $room->bathrooms,
+            'details' => $room->details,
         ];
 
         return response()->json($roomCamelCase, 200);
