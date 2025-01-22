@@ -3,7 +3,7 @@ import { Link } from "react-router";
 
 const Hero = () => {
   return (
-    <div className="hero-section bg-cover bg-center h-screen flex items-center justify-center relative text-center text-white py-0 px-20">
+    <div className="hero-section h-screen flex items-center justify-center relative text-center py-0 px-20">
       <div className="hero-content relative">
         <h1 className="mb-5 text-5xl font-bold">
           Experience Luxury & Comfort Like Never Before

@@ -149,14 +149,6 @@
       width: 15px;
     }
   }
-  .hero-section {
-    background-image: url("./images/pexels-pixabay-302831.jpg");
-  }
-  .hero-section::before {
-    content: "";
-    background-color: rgba(0, 0, 0, 0.5);
-    @apply absolute top-0 left-0 w-full h-full;
-  }
   .hero-content {
     max-width: 800px;
   }
