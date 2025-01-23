@@ -103,24 +103,14 @@
   nav .links li a {
     @apply relative;
   }
-  nav .links li a::before {
-    content: "";
-    left: -2px;
-    transform: translateY(-50%);
-    border-radius: 5px;
-    height: 10px;
-    width: 3px;
-    opacity: 0;
-    @apply transition-all duration-300 bg-primary absolute top-1/2;
-  }
   nav .links li a {
     @apply transition-all duration-300  ml-1 py-3 px-4;
   }
-  nav .links li a:hover::before {
-    opacity: 1;
-  }
   nav .links li a:hover {
-    @apply ml-2 text-primary;
+    @apply text-primary;
+  }
+  nav .links ul {
+    @apply flex-col gap-8 items-start;
   }
   .auth button:first-child {
     @apply text-primary py-3 px-4 font-semibold;
@@ -136,17 +126,10 @@
         items-center justify-between;
     }
     nav .links {
-      @apply flex-row justify-center items-center m-0 flex-1;
+      @apply flex-row justify-center items-center m-0 flex-1 mx-auto;
     }
-    nav .links li a::before {
-      height: 3px;
-      width: 0px;
-      left: 50%;
-      transform: translateX(-50%);
-      top: 37px;
-    }
-    nav .links li a:hover::before {
-      width: 15px;
+    nav .links ul {
+      @apply gap-0 flex-row items-center;
     }
   }
   .hero-content {

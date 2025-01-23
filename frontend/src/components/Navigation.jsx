@@ -3,6 +3,14 @@ import { Link } from "react-router-dom";
 import { Button } from "./ui/button";
 import { FaBars, FaTimes } from "react-icons/fa";
 
+import {
+  NavigationMenu,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  navigationMenuTriggerStyle,
+} from "@/components/ui/navigation-menu";
+
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
   const navRef = useRef();
@@ -34,20 +42,39 @@ const Navigation = () => {
           py-20 px-7 gap-5 xl:gap-80 transition-all duration-300`}
         ref={navRef}
       >
-        <ul className="links mt-8 flex-col flex font-medium gap-6">
-          <li>
-            <Link to="/rooms">Rooms</Link>
-          </li>
-          <li>
-            <Link to="/offers">Offers</Link>
-          </li>
-          <li>
-            <Link to="about">About</Link>
-          </li>
-          <li>
-            <Link to="/contact">Contact</Link>
-          </li>
-        </ul>
+        <NavigationMenu className="links mt-8 flex-col flex font-medium gap-6">
+          <NavigationMenuList>
+            <NavigationMenuItem>
+              <Link to="/rooms">
+                <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                  Rooms
+                </NavigationMenuLink>
+              </Link>
+            </NavigationMenuItem>
+            <NavigationMenuItem>
+              <Link to="/offers">
+                <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                  Offers
+                </NavigationMenuLink>
+              </Link>
+            </NavigationMenuItem>
+            <NavigationMenuItem>
+              <Link to="/about">
+                <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                  About
+                </NavigationMenuLink>
+              </Link>
+            </NavigationMenuItem>
+            <NavigationMenuItem>
+              <Link to="/contact">
+                <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                  Contact
+                </NavigationMenuLink>
+              </Link>
+            </NavigationMenuItem>
+          </NavigationMenuList>
+        </NavigationMenu>
+
         <div className="auth flex justify-center gap-8">
           <Button className="w-24 " variant="outline">
             <Link to="/login">Login</Link>
