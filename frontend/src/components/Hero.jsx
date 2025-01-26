@@ -4,17 +4,10 @@ import { Link } from "react-router";
 const Hero = () => {
   return (
     <div
-      className="hero-section bg-white flex items-center justify-center relative text-center py-0 px-20"
-      style={{ height: "75vh" }}
+      className="hero-section bg-white text-center flex items-center justify-center relative tpy-0 px-20 z-0"
+      style={{ height: "calc(100vh - 64px)" }}
     >
-      {/* <div className="hero-content relative">
-        <h1 className="mb-5 text-5xl font-bold"></h1>
-        <p className="text-lg mb-8 max-md:text-base"></p>
-        <button className="cta-button bg-blue-600 text-white px-8 py-3 rounded-lg text-lg hover:bg-blue-700 transition duration-300">
-          <Link to="/rooms">Book Your Stay Now</Link>
-        </button>
-      </div> */}
-      <div className="max-w-4xl">
+      <div className="max-w-4xl mb-24">
         <div className="bg-blue-100 text-blue-800 px-4 py-2 rounded-full inline-block mb-6">
           New! Record user interviews without recording bots
         </div>

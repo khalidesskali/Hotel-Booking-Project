@@ -135,6 +135,12 @@
   .hero-content {
     max-width: 800px;
   }
+  .hero-section::before {
+    content: "";
+    background-color: #e9f0f080;
+    transform: skewY(-8deg);
+    @apply absolute top-0 left-0 size-full origin-top-left  -z-10;
+  }
   .cta-button {
     background-color: var(--primary-color);
     padding: 15px 30px;
