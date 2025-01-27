@@ -7,10 +7,10 @@ import Contact from "./components/Contact";
 import Login from "./components/Login";
 import Signup from "./components/Signup";
 import PageNotFound from "./components/PageNotFound";
-import Offers from "./components/Offers";
 import Header from "./components/Header";
 import Book from "./components/Book";
 import { AuthProvider } from "./components/AuthProvider";
+import ProtectedAuthRoute from "./components/ProtectedAuthRoute";
 
 const App = () => {
   return (
@@ -23,9 +23,10 @@ const App = () => {
           <Route path="/rooms/:id" element={<Book />} />
           <Route path="/About" element={<About />} />
           <Route path="/contact" element={<Contact />} />
-          <Route path="/offers" element={<Offers />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/login" element={<Login />} />
+          <Route element={<ProtectedAuthRoute />}>
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
+          </Route>
           <Route path="/*" element={<PageNotFound />} />
         </Routes>
       </div>
