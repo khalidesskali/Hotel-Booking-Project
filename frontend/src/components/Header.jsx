@@ -2,7 +2,7 @@ import { Link, useLocation } from "react-router-dom";
 import Navigation from "./Navigation";
 
 const Header = () => {
-  const location = useLoaction();
+  const location = useLocation();
   if (location.pathname === "/login" || location.pathname === "/signup") {
     return null;
   }
