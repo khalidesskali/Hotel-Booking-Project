@@ -10,10 +10,11 @@ import PageNotFound from "./components/PageNotFound";
 import Offers from "./components/Offers";
 import Header from "./components/Header";
 import Book from "./components/Book";
+import { AuthProvider } from "./components/AuthProvider";
 
 const App = () => {
   return (
-    <div>
+    <AuthProvider>
       <Header />
       <div className="mt-16">
         <Routes>
@@ -28,7 +29,7 @@ const App = () => {
           <Route path="/*" element={<PageNotFound />} />
         </Routes>
       </div>
-    </div>
+    </AuthProvider>
   );
 };
 

@@ -1,7 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useAuth } from "./AuthProvider";
 
 function validateData(data) {
   const errors = {};
@@ -20,6 +21,9 @@ const Login = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [errors, setErrors] = useState({ email: false, password: false });
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+
+  const { login } = useAuth();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -28,7 +32,8 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    setErrors(validateData(formData));
+    const validationErrors = validateData(formData);
+    setErrors(validationErrors);
 
     if (Object.keys(errors).length > 0) {
       return;
@@ -37,13 +42,16 @@ const Login = () => {
     setLoading(true);
 
     try {
-      const response = await login(formData);
+      const response = await signin(formData);
       console.log(response.data);
 
       // Store the token in localStorage
-      localStorage.setItem("auth_token", response.data.token);
+      login(response.data);
 
       setLoading(false);
+      console.log("Login successful", response.data);
+
+      navigate("/rooms");
     } catch (e) {
       console.error("An error has occurred", e);
       setLoading(false);
@@ -54,7 +62,7 @@ const Login = () => {
     }
   };
 
-  const login = async (data) => {
+  const signin = async (data) => {
     const response = await axios.post("http://localhost:8000/api/login", data);
     return response;
   };
@@ -100,7 +108,7 @@ const Login = () => {
             )}
           </div>
           <Button className="w-full block bg-primary mb-2" type="submit">
-            Login
+            {loading ? "Logging in..." : "Login"}
           </Button>
           <span className="block mx-auto font-medium w-fit text-sm ">
             don't you have an account?{"  "}
@@ -108,7 +116,6 @@ const Login = () => {
               Signup
             </Link>
           </span>
-          {loading && <div>Loading...</div>}
         </form>
       </div>
     </>
