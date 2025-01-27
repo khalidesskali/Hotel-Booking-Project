@@ -2,6 +2,11 @@ import { Link } from "react-router-dom";
 import Navigation from "./Navigation";
 
 const Header = () => {
+  const location = useLoaction();
+  if (location.pathname === "/login" || location.pathname === "/signup") {
+    return null;
+  }
+
   return (
     <header className="bg-white fixed top-0 left-0 z-20 w-full">
       <div className="container mx-auto flex items-center justify-between  p-4 h-16">
