@@ -1,14 +1,20 @@
 import React, { useEffect, useState } from "react";
-import { IoIosSearch } from "react-icons/io";
 import { Button } from "./ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import axios from "axios";
 import { useNavigate } from "react-router";
+import Filter from "./Filter";
 
 const Rooms = () => {
   const [search, setSearch] = useState("");
   const [roomType, setRoomType] = useState("");
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
   const [rooms, setRooms] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -18,7 +24,6 @@ const Rooms = () => {
     const fetchRooms = async () => {
       try {
         const response = await axios.get("http://localhost:8000/api/rooms");
-        // console.log(response.data);
         setRooms(response.data.data);
         setLoading(false);
       } catch (e) {
@@ -34,40 +39,89 @@ const Rooms = () => {
     room.roomType.toLowerCase().includes(search.toLowerCase())
   );
 
-  const today = new Date().toISOString().split("T")[0];
+  const handleChange = (e) => {};
 
   return (
-    <div className="container mx-auto px-4">
-      <div
+    <div className="flex justify-center h-screen">
+      <div className="flex-1 bg-[#f1f1f1] h-full p-5">
+        <Filter search={search} setSearch={setSearch} />
+      </div>
+      <div className="flex-[4] p-5">
+        <div className="mb-5">
+          <span className="block mb-4 text-gray-500 text-sm">
+            showing results for
+          </span>
+          <Select>
+            <SelectTrigger>
+              <SelectValue placeholder="Sort By" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectItem value="apple">Price</SelectItem>
+                <SelectItem value="banana">Guests</SelectItem>
+                <SelectItem value="blueberry">Blueberry</SelectItem>
+                <SelectItem value="grapes">Grapes</SelectItem>
+                <SelectItem value="pineapple">Pineapple</SelectItem>
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+        </div>
+        <ul className="rooms grid grid-cols-1 gap-5 bg-gray-100 p-7 rounded-xl">
+          {/* {loading
+            ? Array.from({ length: 20 }).map((_, index) => (
+                <li
+                  key={index}
+                  className="bg-white p-2 rounded-xl animate-pulse"
+                >
+                  <div className="bg-gray-300 h-64 rounded-t-xl"></div>
+                  <div className="info p-3">
+                    <div className="h-4 bg-gray-300 w-3/4 rounded mb-2"></div>
+                    <div className="h-4 bg-gray-300 w-1/2 rounded mb-2"></div>
+                    <div className="h-4 bg-gray-300 w-1/4 rounded"></div>
+                  </div>
+                </li>
+              ))
+            :
+              ))} */}
+          {filteredRooms.map((room) => {
+            return (
+              <li key={room.id} className="flex bg-white p-2 rounded-xl">
+                <img
+                  src={room.imageSrc}
+                  alt={room.roomType}
+                  className="rounded-sm w-96 h-60"
+                />
+                <div className="details p-5">
+                  <h3 className="text-2xl font-semibold">{room.roomType}</h3>
+                  <p className="text-gray-500 mb-2 text-lg">
+                    {room.description}
+                  </p>
+                </div>
+                <div className="info flex items-end justify-end flex-col gap-3 flex-1 mr-5">
+                  <span className="text-gray-500 flex items-center gap-1">
+                    <span className="text-primary font-medium">
+                      ${room.price.toFixed(2)}{" "}
+                      <span className="text-xs">/per night</span>
+                    </span>
+                  </span>
+                  <Button
+                    className="mb-4 block"
+                    onClick={() => navigate(`/rooms/${room.id}`)}
+                  >
+                    View options
+                  </Button>
+                </div>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+
+      {/* <div
         className="navigate flex items-center justify-center mb-10"
         style={{ marginTop: "100px" }}
       >
-        <div className="search-bar  relative w-fit p-5">
-          <input
-            type="search"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search..."
-            className="pl-10 search-input focus:pl-4 mr-4"
-          />
-          <IoIosSearch className="absolute top-1/2 left-7 -translate-y-1/2 pr-1 border-r border-red w-7 h-7" />
-        </div>
-        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4 mr-4 ">
-          <label>Room Type</label>
-          <select
-            className="p-3 cursor-pointer rounded-sm focus:outline-none"
-            style={{ border: "1px solid #eee" }}
-            value={roomType}
-            onChange={(e) => setRoomType(e.target.value)}
-          >
-            <option value="">Select Type</option>
-            <option value="standard">Standard</option>
-            <option value="single">Single</option>
-            <option value="double">Double</option>
-            <option value="suite">Suite</option>
-            <option value="family">Family</option>
-          </select>
-        </div>
+        
         <div className="flex items-center gap-4">
           <div className="start-date flex items-center gap-2">
             <label>Available From</label>
@@ -88,45 +142,7 @@ const Rooms = () => {
             />
           </div>
         </div>
-      </div>
-      <ul className="rooms grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6  bg-gray-100 p-7 rounded-xl">
-        {loading
-          ? Array.from({ length: 7 }).map((_, index) => (
-              <li key={index} className="bg-white p-2 rounded-xl animate-pulse">
-                <div className="bg-gray-300 h-64 rounded-t-xl"></div>
-                <div className="info p-3">
-                  <div className="h-4 bg-gray-300 w-3/4 rounded mb-2"></div>
-                  <div className="h-4 bg-gray-300 w-1/2 rounded mb-4"></div>
-                  <div className="h-4 bg-gray-300 w-1/4 rounded"></div>
-                </div>
-              </li>
-            ))
-          : filteredRooms.map((room) => (
-              <li key={room.id} className="bg-white p-2 rounded-xl">
-                <img
-                  src={room.imageSrc}
-                  alt={room.roomType}
-                  style={{ width: "100%", height: "220px" }}
-                  className="rounded-t-xl"
-                />
-                <div className="details p-3">
-                  <h3 className="text-lg font-semibold">{room.roomType}</h3>
-                  <p className="text-gray-500 mb-2 h-20">{room.description}</p>
-                  <div className="info flex items-center justify-between">
-                    <span className="text-gray-500 flex items-center gap-1">
-                      Price:
-                      <span className="text-primary font-medium">
-                        ${room.price.toFixed(2)}
-                      </span>
-                    </span>
-                    <Button onClick={() => navigate(`/rooms/${room.id}`)}>
-                      Book
-                    </Button>
-                  </div>
-                </div>
-              </li>
-            ))}
-      </ul>
+      </div> */}
     </div>
   );
 };
