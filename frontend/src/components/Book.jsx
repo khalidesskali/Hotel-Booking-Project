@@ -1,21 +1,47 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import axios from "axios";
-import { FaUserFriends, FaBath } from "react-icons/fa";
+import { PiBathtubLight } from "react-icons/pi";
+import { CiCalendar, CiUser } from "react-icons/ci";
 import { LiaBedSolid } from "react-icons/lia";
-import { MdExposure, MdOutlineSquareFoot } from "react-icons/md";
-import { FaCalendarAlt } from "react-icons/fa";
+import { IoIosResize } from "react-icons/io";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css"; // Import the CSS for the skeleton
+import { Button } from "./ui/button";
+import { cn } from "@/lib/utils";
+import { format } from "date-fns";
+import { CalendarIcon } from "lucide-react";
+import { Calendar } from "@/components/ui/calendar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { useAuth } from "./AuthProvider";
 
 const Book = () => {
   const [room, setRoom] = useState(null);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [loading, setLoading] = useState(true);
+  const [phone, setPhone] = useState("");
+  const [error, setError] = useState(false);
+  const navigate = useNavigate();
 
   const { id } = useParams();
 
+  // Fetch signle room data
   useEffect(() => {
     const fetchRoom = async () => {
       try {
@@ -33,7 +59,52 @@ const Book = () => {
     fetchRoom();
   }, [id]);
 
-  const today = new Date().toISOString().split("T")[0];
+  const { user } = useAuth();
+
+  const [userData, setUserData] = useState([]);
+  // Fetch the data of the current user (if loggined)
+  useEffect(() => {
+    const fetchUser = async () => {
+      if (user) {
+        try {
+          const res = await axios.get(
+            `http://localhost:8000/api/users/${user.id}`
+          );
+          setUserData(res.data);
+        } catch (e) {
+          console.error("An error has occured", e);
+        }
+      }
+    };
+
+    fetchUser();
+  }, []);
+
+  const isDateDisabled = (date) => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Remove time part for accurate comparison
+    return date < today;
+  };
+
+  const handleClick = () => {
+    if (!phone) setError(true);
+    else setError(false);
+  };
+
+  const minDate = new Date(startDate);
+  minDate.setDate(minDate.getDate() + 1);
+
+  function calculateDateDifference(start, end) {
+    const startObj = new Date(start);
+    const endObj = new Date(end);
+
+    if (isNaN(startObj) || isNaN(endObj)) return;
+
+    const diff = Math.abs(endObj - startObj);
+
+    const diffDays = Math.ceil(diff / (1000 * 60 * 60 * 24));
+    return diffDays;
+  }
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -68,12 +139,12 @@ const Book = () => {
                 alt={room.roomType}
                 className="w-72 object-cover rounded-md mb-4"
               />
-              <div>
+              <div className="flex-1">
                 <h2 className="text-xl font-semibold text-primary mt-4 mb-2">
                   {room.roomType}
                 </h2>
                 <p className="text-gray-600 mb-4">{room.description}</p>
-                <div className="flex items-center gap-7 text-gray-700 mb-6 text-sm font-semibold">
+                <div className="flex items-center justify-between gap-7 font-medium text-gray-700 mb-6 text-sm">
                   <div className="flex flex-col items-center gap-2">
                     <span className="text-gray-600">Beds</span>
                     <div className="flex gap-2 text-sm">
@@ -85,21 +156,21 @@ const Book = () => {
                     <span className="text-gray-600">Area</span>
                     <div className="flex gap-2 text-sm">
                       <span>{room.area}</span>
-                      <MdOutlineSquareFoot className="text-xl" />
+                      <IoIosResize className="text-xl" />
                     </div>
                   </div>
-                  <div className="flex flex-col items-center gap-2">
+                  <div className="flex flex-col items-center gap-2">
                     <span className="text-gray-600">Guests</span>
                     <div className="flex gap-2 text-sm">
                       <span>{room.guests}</span>
-                      <FaUserFriends className="text-xl" />
+                      <CiUser className="text-xl" />
                     </div>
                   </div>
                   <div className="flex flex-col items-center gap-2">
                     <span className="text-gray-600">Bathrooms</span>
                     <div className="flex gap-2 text-sm">
                       <span>{room.bathroom}</span>
-                      <FaBath className="text-xl" />
+                      <PiBathtubLight className="text-xl" />
                     </div>
                   </div>
                 </div>
@@ -107,44 +178,21 @@ const Book = () => {
             </div>
             <div className="mb-10">
               <h3 className="text-lg font-bold mb-2 mt-10">Good to know:</h3>
-              <p>
-                Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-                Dolorum doloremque eos neque officia provident assumenda, quo,
-                doloribus saepe optio tempora minima distinctio culpa amet odio
-                illo ullam minus, eligendi voluptates?
-              </p>
+              <p>{room.details}</p>
             </div>
             <div className="lg:col-span-3  rounded-lg">
               <h3 className="text-lg font-bold mb-4">Enter your details</h3>
               <form className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium mb-1">
-                    First Name *
+                    Full Name *
                   </label>
                   <input
                     type="text"
                     className="w-full border border-gray-300 rounded-lg px-3 py-2"
                     placeholder="Enter your first name"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium mb-1">
-                    Last Name *
-                  </label>
-                  <input
-                    type="text"
-                    className="w-full border border-gray-300 rounded-lg px-3 py-2"
-                    placeholder="Enter your last name"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium mb-1">
-                    Email Address *
-                  </label>
-                  <input
-                    type="email"
-                    className="w-full border border-gray-300 rounded-lg px-3 py-2"
-                    placeholder="Enter your email address"
+                    value={userData.fullName}
+                    readOnly
                   />
                 </div>
                 <div>
@@ -152,32 +200,101 @@ const Book = () => {
                     Phone Number *
                   </label>
                   <input
-                    type="tel"
-                    className="w-full border border-gray-300 rounded-lg px-3 py-2"
+                    type="number"
+                    className={`w-full border rounded-lg px-3 py-2 ${
+                      error ? "border-red-500" : "border-gray-300 "
+                    }`}
                     placeholder="Enter your phone number"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                  />
+                  {error && (
+                    <p className="text-red-500 text-sm mr-2 mt-1">
+                      This field must be filled
+                    </p>
+                  )}
+                </div>
+                <div className="col-start-1 col-end-3">
+                  <label className="block text-sm font-medium mb-1">
+                    Email Address *
+                  </label>
+                  <input
+                    type="email"
+                    className="w-full border border-gray-300 rounded-lg px-3 py-2"
+                    placeholder="Enter your email address"
+                    value={userData.email}
+                    readOnly
                   />
                 </div>
                 <div>
                   <label className="block text-sm font-medium mb-1">
                     From *
                   </label>
-                  <input
-                    type="date"
-                    value={endDate}
-                    onChange={(e) => setEndDate(e.target.value)}
-                    min={today}
-                  />
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant={"outline"}
+                        className={cn(
+                          "w-full justify-start text-left font-normal",
+                          !startDate && "text-muted-foreground"
+                        )}
+                      >
+                        <CalendarIcon />
+                        {startDate ? (
+                          format(startDate, "PPP")
+                        ) : (
+                          <span>Pick a date</span>
+                        )}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0">
+                      <Calendar
+                        mode="single"
+                        selected={startDate}
+                        onSelect={(date) => {
+                          setStartDate(date);
+                          setEndDate("");
+                        }}
+                        initialFocus
+                        disabled={isDateDisabled}
+                        fromDate={new Date()}
+                      />
+                    </PopoverContent>
+                  </Popover>
+                  {console.log(startDate)}
                 </div>
                 <div>
                   <label className="block text-sm font-medium mb-1">
                     Until *
                   </label>
-                  <input
-                    type="date"
-                    value={startDate}
-                    onChange={(e) => setStartDate(e.target.value)}
-                    min={today}
-                  />
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant={"outline"}
+                        className={cn(
+                          "w-full justify-start text-left font-normal",
+                          !endDate && "text-muted-foreground"
+                        )}
+                      >
+                        <CalendarIcon />
+                        {endDate ? (
+                          format(endDate, "PPP")
+                        ) : (
+                          <span>Pick a date</span>
+                        )}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0">
+                      <Calendar
+                        mode="single"
+                        selected={endDate}
+                        onSelect={setEndDate}
+                        initialFocus
+                        disabled={isDateDisabled}
+                        fromDate={minDate}
+                      />
+                    </PopoverContent>
+                  </Popover>
                 </div>
               </form>
             </div>
@@ -194,7 +311,9 @@ const Book = () => {
                     Check-in
                   </span>
                   <span className="text-primary font-medium">
-                    Sun, 22 May 2022
+                    {startDate instanceof Date
+                      ? format(startDate, "PPP")
+                      : "--"}
                   </span>
                 </div>
                 <div className="flex flex-col gap-2">
@@ -202,47 +321,61 @@ const Book = () => {
                     Check-out
                   </span>
                   <span className="text-primary font-medium">
-                    Wed, 25 May 2022
+                    {endDate instanceof Date ? format(endDate, "PPP") : "--"}
                   </span>
                 </div>
               </div>
               <div className="flex flex-col gap-1 justify-between">
-                <span className="font-bold text-sm text-gray-500">
+                <span className="font-semibold text-sm text-gray-500">
                   Total length of stay:
                 </span>
                 <span className="flex items-center gap-4 font-semibold">
-                  3 <FaCalendarAlt color="blue" />
+                  {calculateDateDifference(startDate, endDate)}
+                  <CiCalendar className="text-[#391ac7] text-base" />
                 </span>
               </div>
             </div>
-            <h4 className="text-sm font-bold mb-2">Your price summary</h4>
-            <div className="flex justify-between">
-              <span className="font-medium">Rooms and offer:</span>
-              <span className="font-semibold text-sm text-secondary">
-                ${room.price * 3}
-              </span>
-            </div>
-            <div className="flex justify-between">
-              <span className="font-medium">8% VAT:</span>
-              <span className="font-semibold text-sm text-secondary">
-                ${(room.price * 3 * 0.08).toFixed(2)}
-              </span>
-            </div>
-            <div className="flex justify-between">
-              <span className="font-medium">City tax:</span>
-              <span className="font-semibold text-sm text-secondary">
-                $16.44
-              </span>
-            </div>
-            <div className="flex justify-between font-bold text-lg mt-4">
+            <div className="flex justify-between text-[#249b6e] font-semibold text-lg mt-4">
               <span>Total Price:</span>
-              <span>
-                ${(room.price * 3 + room.price * 3 * 0.08 + 16.44).toFixed(2)}
+              <span className="font-semibold text-base">
+                {startDate && endDate
+                  ? `$${(
+                      calculateDateDifference(startDate, endDate) * room.price
+                    ).toFixed(2)}`
+                  : "--"}
               </span>
             </div>
-            <button className="mt-6 w-full bg-primary text-white py-2 px-4 rounded-lg hover:bg-secondary">
-              Request To Book
-            </button>
+            {!user ? (
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <button className="mt-6 w-full bg-primary text-white py-2 px-4 rounded-lg">
+                    Request To Book
+                  </button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>You have to login first</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      This action cannot be done. You cannot book a room if you
+                      are not logged in.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogAction onClick={() => navigate("/login")}>
+                      Login
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+            ) : (
+              <button
+                className="mt-6 w-full bg-primary text-white py-2 px-4 rounded-lg"
+                onClick={handleClick}
+              >
+                Request To Book
+              </button>
+            )}
           </div>
         </div>
       )}
