@@ -4,6 +4,7 @@ use App\Http\Controllers\RoomsController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SignupController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\UserController;
 
 // Signup Route
 Route::post('/signup', [SignupController::class, 'store']);
@@ -22,3 +23,6 @@ Route::get('/rooms', [RoomsController::class, 'rooms']);
 
 // Single Room Route
 Route::get('/rooms/{id}', [RoomsController::class, 'show']);
+
+// Route users
+Route::resource('users', UserController::class)->only('index', 'show', 'delete');
