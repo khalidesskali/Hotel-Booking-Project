@@ -6,7 +6,13 @@ const ProtectedAuthRoute = () => {
   const { user } = useAuth();
 
   if (user) {
-    return <Navigate to="/rooms" replace />;
+    const lastPage = localStorage.getItem("lastPage");
+
+    return lastPage ? (
+      <Navigate to={lastPage} replace />
+    ) : (
+      <Navigate to="/rooms" replace />
+    );
   }
 
   return <Outlet />;
