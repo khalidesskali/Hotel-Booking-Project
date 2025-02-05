@@ -178,7 +178,7 @@ const Book = () => {
   }
 
   const loginClick = () => {
-    localStorage.setItem("lastPage", window.location.href);
+    localStorage.setItem("lastPage", window.location.pathname);
     navigate("/login");
   };
 
