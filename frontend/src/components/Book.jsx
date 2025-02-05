@@ -31,22 +31,27 @@ import {
 import { useAuth } from "./AuthProvider";
 
 const Book = () => {
+  const { user } = useAuth();
+  const { id } = useParams();
+
   const [room, setRoom] = useState(null);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [loading, setLoading] = useState(true);
+  const [loading2, setLoading2] = useState(false);
   const [phone, setPhone] = useState("");
-  const [error, setError] = useState(false);
-  const navigate = useNavigate();
-
-  const { id } = useParams();
+  const [error, setError] = useState({
+    phone: false,
+    checkIn: false,
+    checkOut: false,
+  });
 
   // Fetch signle room data
   useEffect(() => {
     const fetchRoom = async () => {
       try {
         const response = await axios.get(
-          ` http://localhost:8000/api/rooms/${id}`
+          `http://localhost:8000/api/rooms/${id}`
         );
         setRoom(response.data);
         setLoading(false);
@@ -59,7 +64,7 @@ const Book = () => {
     fetchRoom();
   }, [id]);
 
-  const { user } = useAuth();
+  const navigate = useNavigate();
 
   const [userData, setUserData] = useState([]);
   // Fetch the data of the current user (if loggined)
@@ -78,7 +83,7 @@ const Book = () => {
     };
 
     fetchUser();
-  }, []);
+  }, [user]);
 
   const isDateDisabled = (date) => {
     const today = new Date();
@@ -86,9 +91,75 @@ const Book = () => {
     return date < today;
   };
 
-  const handleClick = () => {
-    if (!phone) setError(true);
-    else setError(false);
+  // Handle dates conversions
+  const formatDate = (date) => {
+    const parsedDate = new Date(date);
+    return isNaN(parsedDate) ? null : parsedDate.toISOString().split("T")[0]; // Format as 'YYYY-MM-DD'
+  };
+
+  // Intial the data object
+  const [data, setData] = useState({
+    user_id: user ? Number(user.id) : null,
+    room_id: Number(id),
+    check_in: formatDate(startDate),
+    check_out: formatDate(endDate),
+    price: 0,
+  });
+
+  useEffect(() => {
+    // Ensure room is not null or undefined before accessing room.price
+    if (room && room.price) {
+      setData((prevData) => ({
+        ...prevData,
+        price: parseFloat(
+          (calculateDateDifference(startDate, endDate) * room.price).toFixed(2)
+        ),
+      }));
+    }
+  }, [room, startDate, endDate]);
+
+  const handleClick = async () => {
+    let newError = { ...error };
+
+    if (!phone) newError.phone = true;
+    else newError.phone = false;
+
+    if (!startDate) newError.checkIn = true;
+    else newError.checkIn = false;
+
+    if (!endDate) newError.checkOut = true;
+    else newError.checkOut = false;
+
+    setError(newError);
+
+    if (!phone || !startDate || !endDate) return;
+
+    // Convert dates immediately
+    const formattedStartDate = formatDate(startDate);
+    const formattedEndDate = formatDate(endDate);
+
+    // Create a new data object to ensure correct values are sent
+    const payload = {
+      ...data,
+      check_in: formattedStartDate,
+      check_out: formattedEndDate,
+    };
+
+    setLoading2(true);
+
+    try {
+      const response = await axios.post(
+        "http://localhost:8000/api/bookings",
+        payload
+      );
+      console.log(response.data);
+      alert("The room booked successfully");
+      navigate("/payment");
+    } catch (e) {
+      console.error("An error has occurred", e);
+    } finally {
+      setLoading2(false);
+    }
   };
 
   const minDate = new Date(startDate);
@@ -105,6 +176,11 @@ const Book = () => {
     const diffDays = Math.ceil(diff / (1000 * 60 * 60 * 24));
     return diffDays;
   }
+
+  const loginClick = () => {
+    localStorage.setItem("lastPage", window.location.href);
+    navigate("/login");
+  };
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -202,14 +278,14 @@ const Book = () => {
                   <input
                     type="number"
                     className={`w-full border rounded-lg px-3 py-2 ${
-                      error ? "border-red-500" : "border-gray-300 "
+                      error.phone ? "border-red-600" : "border-gray-300"
                     }`}
                     placeholder="Enter your phone number"
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
                   />
-                  {error && (
-                    <p className="text-red-500 text-sm mr-2 mt-1">
+                  {error.phone && (
+                    <p className="text-red-600 text-sm mr-2 mt-1">
                       This field must be filled
                     </p>
                   )}
@@ -236,14 +312,19 @@ const Book = () => {
                         variant={"outline"}
                         className={cn(
                           "w-full justify-start text-left font-normal",
-                          !startDate && "text-muted-foreground"
+                          !startDate && "text-muted-foreground",
+                          error.checkIn ? "border-red-600" : "border-input"
                         )}
                       >
-                        <CalendarIcon />
+                        <CalendarIcon
+                          className={error.checkIn ? "text-red-600" : ""}
+                        />
                         {startDate ? (
                           format(startDate, "PPP")
                         ) : (
-                          <span>Pick a date</span>
+                          <span className={error.checkIn ? "text-red-600" : ""}>
+                            Pick a date
+                          </span>
                         )}
                       </Button>
                     </PopoverTrigger>
@@ -261,7 +342,6 @@ const Book = () => {
                       />
                     </PopoverContent>
                   </Popover>
-                  {console.log(startDate)}
                 </div>
                 <div>
                   <label className="block text-sm font-medium mb-1">
@@ -273,14 +353,21 @@ const Book = () => {
                         variant={"outline"}
                         className={cn(
                           "w-full justify-start text-left font-normal",
-                          !endDate && "text-muted-foreground"
+                          !endDate && "text-muted-foreground",
+                          error.checkOut ? "border-red-600" : "border-input"
                         )}
                       >
-                        <CalendarIcon />
+                        <CalendarIcon
+                          className={error.checkOut ? "text-red-600" : ""}
+                        />
                         {endDate ? (
                           format(endDate, "PPP")
                         ) : (
-                          <span>Pick a date</span>
+                          <span
+                            className={error.checkOut ? "text-red-600" : ""}
+                          >
+                            Pick a date
+                          </span>
                         )}
                       </Button>
                     </PopoverTrigger>
@@ -338,11 +425,7 @@ const Book = () => {
             <div className="flex justify-between text-[#249b6e] font-semibold text-lg mt-4">
               <span>Total Price:</span>
               <span className="font-semibold text-base">
-                {startDate && endDate
-                  ? `$${(
-                      calculateDateDifference(startDate, endDate) * room.price
-                    ).toFixed(2)}`
-                  : "--"}
+                {startDate && endDate ? `$${data.price.toFixed(2)}` : "--"}
               </span>
             </div>
             {!user ? (
@@ -362,7 +445,7 @@ const Book = () => {
                   </AlertDialogHeader>
                   <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction onClick={() => navigate("/login")}>
+                    <AlertDialogAction onClick={loginClick}>
                       Login
                     </AlertDialogAction>
                   </AlertDialogFooter>
@@ -373,7 +456,7 @@ const Book = () => {
                 className="mt-6 w-full bg-primary text-white py-2 px-4 rounded-lg"
                 onClick={handleClick}
               >
-                Request To Book
+                {loading2 ? "Request To Book..." : "Request To Book"}
               </button>
             )}
           </div>
