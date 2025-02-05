@@ -16,20 +16,18 @@ const App = () => {
   return (
     <AuthProvider>
       <Header />
-      <div className="mt-16">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/rooms" element={<Rooms />} />
-          <Route path="/rooms/:id" element={<Book />} />
-          <Route path="/About" element={<About />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route element={<ProtectedAuthRoute />}>
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<Signup />} />
-          </Route>
-          <Route path="/*" element={<PageNotFound />} />
-        </Routes>
-      </div>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/rooms" element={<Rooms />} />
+        <Route path="/rooms/:id" element={<Book />} />
+        <Route path="/About" element={<About />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route element={<ProtectedAuthRoute />}>
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+        </Route>
+        <Route path="/*" element={<PageNotFound />} />
+      </Routes>
     </AuthProvider>
   );
 };
