@@ -8,8 +8,8 @@ const Header = () => {
   }
 
   return (
-    <header className="bg-white fixed top-0 left-0 z-20 w-full">
-      <div className="container mx-auto flex items-center justify-between  p-4 h-16">
+    <header className="bg-white relative z-20 w-full">
+      <div className="container mx-auto flex items-center justify-between p-4">
         <Link className="logo flex items-center gap-2" to="/">
           <span className="block font-semibold text-2xl">
             Stay<span className="text-primary">H</span>ome
