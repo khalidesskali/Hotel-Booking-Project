@@ -11,6 +11,9 @@ import Header from "./components/Header";
 import Book from "./components/Book";
 import { AuthProvider } from "./components/AuthProvider";
 import ProtectedAuthRoute from "./components/ProtectedAuthRoute";
+import BookingSuccess from "./components/BookingSuccess";
+import Payment from "./components/Payment";
+import ReviewConfirmation from "./components/ReviewConfirmation";
 
 const App = () => {
   return (

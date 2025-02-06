@@ -144,9 +144,9 @@ const Book = () => {
         "http://localhost:8000/api/bookings",
         payload
       );
-      console.log(response.data);
       alert("The room booked successfully");
-      navigate("/payment");
+      const data = response.data;
+      navigate(`/review/${data.booking.id}`);
     } catch (e) {
       console.error("An error has occurred", e);
     } finally {
