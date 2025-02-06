@@ -2,33 +2,27 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import axios from "axios";
 import { PiBathtubLight } from "react-icons/pi";
-import { CiCalendar, CiUser } from "react-icons/ci";
+import { CiUser } from "react-icons/ci";
 import { LiaBedSolid } from "react-icons/lia";
 import { IoIosResize } from "react-icons/io";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css"; // Import the CSS for the skeleton
-import { Button } from "./ui/button";
-import { cn } from "@/lib/utils";
 import { format } from "date-fns";
-import { CalendarIcon } from "lucide-react";
-import { Calendar } from "@/components/ui/calendar";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
 import { useAuth } from "./AuthProvider";
+import ReservationDetails from "./ReservationDetails";
+import ReservationSummary from "./ReservationSummary";
+
+function calculateDateDifference(start, end) {
+  const startObj = new Date(start);
+  const endObj = new Date(end);
+
+  if (isNaN(startObj) || isNaN(endObj)) return;
+
+  const diff = Math.abs(endObj - startObj);
+
+  const diffDays = Math.ceil(diff / (1000 * 60 * 60 * 24));
+  return diffDays;
+}
 
 const Book = () => {
   const { user } = useAuth();
@@ -85,16 +79,14 @@ const Book = () => {
     fetchUser();
   }, [user]);
 
-  const isDateDisabled = (date) => {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0); // Remove time part for accurate comparison
-    return date < today;
-  };
-
   // Handle dates conversions
   const formatDate = (date) => {
+    if (!date) return null;
+
     const parsedDate = new Date(date);
-    return isNaN(parsedDate) ? null : parsedDate.toISOString().split("T")[0]; // Format as 'YYYY-MM-DD'
+    if (isNaN(parsedDate)) return null;
+
+    return parsedDate.toLocaleDateString("fr-CA"); // 'YYYY-MM-DD' format
   };
 
   // Intial the data object
@@ -160,26 +152,6 @@ const Book = () => {
     } finally {
       setLoading2(false);
     }
-  };
-
-  const minDate = new Date(startDate);
-  minDate.setDate(minDate.getDate() + 1);
-
-  function calculateDateDifference(start, end) {
-    const startObj = new Date(start);
-    const endObj = new Date(end);
-
-    if (isNaN(startObj) || isNaN(endObj)) return;
-
-    const diff = Math.abs(endObj - startObj);
-
-    const diffDays = Math.ceil(diff / (1000 * 60 * 60 * 24));
-    return diffDays;
-  }
-
-  const loginClick = () => {
-    localStorage.setItem("lastPage", window.location.pathname);
-    navigate("/login");
   };
 
   return (
@@ -256,210 +228,27 @@ const Book = () => {
               <h3 className="text-lg font-bold mb-2 mt-10">Good to know:</h3>
               <p>{room.details}</p>
             </div>
-            <div className="lg:col-span-3  rounded-lg">
-              <h3 className="text-lg font-bold mb-4">Enter your details</h3>
-              <form className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium mb-1">
-                    Full Name *
-                  </label>
-                  <input
-                    type="text"
-                    className="w-full border border-gray-300 rounded-lg px-3 py-2"
-                    placeholder="Enter your first name"
-                    value={userData.fullName}
-                    readOnly
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium mb-1">
-                    Phone Number *
-                  </label>
-                  <input
-                    type="number"
-                    className={`w-full border rounded-lg px-3 py-2 ${
-                      error.phone ? "border-red-600" : "border-gray-300"
-                    }`}
-                    placeholder="Enter your phone number"
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
-                  />
-                  {error.phone && (
-                    <p className="text-red-600 text-sm mr-2 mt-1">
-                      This field must be filled
-                    </p>
-                  )}
-                </div>
-                <div className="col-start-1 col-end-3">
-                  <label className="block text-sm font-medium mb-1">
-                    Email Address *
-                  </label>
-                  <input
-                    type="email"
-                    className="w-full border border-gray-300 rounded-lg px-3 py-2"
-                    placeholder="Enter your email address"
-                    value={userData.email}
-                    readOnly
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium mb-1">
-                    From *
-                  </label>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <Button
-                        variant={"outline"}
-                        className={cn(
-                          "w-full justify-start text-left font-normal",
-                          !startDate && "text-muted-foreground",
-                          error.checkIn ? "border-red-600" : "border-input"
-                        )}
-                      >
-                        <CalendarIcon
-                          className={error.checkIn ? "text-red-600" : ""}
-                        />
-                        {startDate ? (
-                          format(startDate, "PPP")
-                        ) : (
-                          <span className={error.checkIn ? "text-red-600" : ""}>
-                            Pick a date
-                          </span>
-                        )}
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0">
-                      <Calendar
-                        mode="single"
-                        selected={startDate}
-                        onSelect={(date) => {
-                          setStartDate(date);
-                          setEndDate("");
-                        }}
-                        initialFocus
-                        disabled={isDateDisabled}
-                        fromDate={new Date()}
-                      />
-                    </PopoverContent>
-                  </Popover>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium mb-1">
-                    Until *
-                  </label>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <Button
-                        variant={"outline"}
-                        className={cn(
-                          "w-full justify-start text-left font-normal",
-                          !endDate && "text-muted-foreground",
-                          error.checkOut ? "border-red-600" : "border-input"
-                        )}
-                      >
-                        <CalendarIcon
-                          className={error.checkOut ? "text-red-600" : ""}
-                        />
-                        {endDate ? (
-                          format(endDate, "PPP")
-                        ) : (
-                          <span
-                            className={error.checkOut ? "text-red-600" : ""}
-                          >
-                            Pick a date
-                          </span>
-                        )}
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0">
-                      <Calendar
-                        mode="single"
-                        selected={endDate}
-                        onSelect={setEndDate}
-                        initialFocus
-                        disabled={isDateDisabled}
-                        fromDate={minDate}
-                      />
-                    </PopoverContent>
-                  </Popover>
-                </div>
-              </form>
-            </div>
+            <ReservationDetails
+              userData={userData}
+              error={error}
+              startDate={startDate}
+              setStartDate={setStartDate}
+              endDate={endDate}
+              setEndDate={setEndDate}
+              phone={phone}
+              setPhone={setPhone}
+              format={format}
+            />
           </div>
-          <div className="bg-white p-6 rounded-lg shadow-md h-fit">
-            <h3 className="text-lg font-bold mb-4">Reservation Summary</h3>
-            <div
-              className="mb-4 border rounded-md p-4"
-              style={{ borderColor: "#e7e8e7" }}
-            >
-              <div className="flex items-center justify-between mb-5">
-                <div className="flex flex-col gap-2">
-                  <span className="text-gray-600 font-semibold text-sm">
-                    Check-in
-                  </span>
-                  <span className="text-primary font-medium">
-                    {startDate instanceof Date
-                      ? format(startDate, "PPP")
-                      : "--"}
-                  </span>
-                </div>
-                <div className="flex flex-col gap-2">
-                  <span className="text-gray-600 font-semibold text-sm">
-                    Check-out
-                  </span>
-                  <span className="text-primary font-medium">
-                    {endDate instanceof Date ? format(endDate, "PPP") : "--"}
-                  </span>
-                </div>
-              </div>
-              <div className="flex flex-col gap-1 justify-between">
-                <span className="font-semibold text-sm text-gray-500">
-                  Total length of stay:
-                </span>
-                <span className="flex items-center gap-4 font-semibold">
-                  {calculateDateDifference(startDate, endDate)}
-                  <CiCalendar className="text-[#391ac7] text-base" />
-                </span>
-              </div>
-            </div>
-            <div className="flex justify-between text-[#249b6e] font-semibold text-lg mt-4">
-              <span>Total Price:</span>
-              <span className="font-semibold text-base">
-                {startDate && endDate ? `$${data.price.toFixed(2)}` : "--"}
-              </span>
-            </div>
-            {!user ? (
-              <AlertDialog>
-                <AlertDialogTrigger asChild>
-                  <button className="mt-6 w-full bg-primary text-white py-2 px-4 rounded-lg">
-                    Request To Book
-                  </button>
-                </AlertDialogTrigger>
-                <AlertDialogContent>
-                  <AlertDialogHeader>
-                    <AlertDialogTitle>You have to login first</AlertDialogTitle>
-                    <AlertDialogDescription>
-                      This action cannot be done. You cannot book a room if you
-                      are not logged in.
-                    </AlertDialogDescription>
-                  </AlertDialogHeader>
-                  <AlertDialogFooter>
-                    <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction onClick={loginClick}>
-                      Login
-                    </AlertDialogAction>
-                  </AlertDialogFooter>
-                </AlertDialogContent>
-              </AlertDialog>
-            ) : (
-              <button
-                className="mt-6 w-full bg-primary text-white py-2 px-4 rounded-lg"
-                onClick={handleClick}
-              >
-                {loading2 ? "Request To Book..." : "Request To Book"}
-              </button>
-            )}
-          </div>
+          <ReservationSummary
+            startDate={startDate}
+            endDate={endDate}
+            handleClick={handleClick}
+            loading2={loading2}
+            calculateDateDifference={calculateDateDifference}
+            format={format}
+            data={data}
+          />
         </div>
       )}
     </div>
