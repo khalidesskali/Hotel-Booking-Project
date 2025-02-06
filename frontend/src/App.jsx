@@ -26,6 +26,9 @@ const App = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
         </Route>
+        <Route path="/review/:id" element={<ReviewConfirmation />} />
+        <Route path="/payment/:id" element={<Payment />} />
+        <Route path="/confirmation" element={<BookingSuccess />} />
         <Route path="/*" element={<PageNotFound />} />
       </Routes>
     </AuthProvider>
