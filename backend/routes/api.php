@@ -30,3 +30,6 @@ Route::apiResource('users', UserController::class)->only('index', 'show', 'delet
 
 // Bookings Route
 Route::apiResource('bookings', BookingController::class);
+
+// Booked room Route
+Route::get('review/{id}', [BookingController::class, 'getRoom']);

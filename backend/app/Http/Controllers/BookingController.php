@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Booking;
+use App\Models\Room;
 
 class BookingController extends Controller
 {
@@ -29,6 +30,7 @@ class BookingController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request) {
+        // Validate data
         $validateData = $request->validate([
             'user_id' => 'required|numeric|exists:users,id',
             'room_id' => 'required|numeric|exists:rooms,id',
@@ -37,6 +39,7 @@ class BookingController extends Controller
             'price' => 'required|numeric|min:0'
         ]);
 
+        // Create booking row
         $booking = Booking::create([
             'user_id' => $validateData['user_id'],
             'room_id' => $validateData['room_id'],
@@ -45,7 +48,20 @@ class BookingController extends Controller
             'total_price' => $validateData['price'],
         ]);
 
-        return response()->json(['message' => 'The room is booked successfully','booking' => $booking], 200);
+        // Format data
+        $bookingFormat = [
+            'id' => $booking->id,
+            'userId' => $booking->user_id,
+            'roomId' => $booking->room_id,
+            'checkIn' => $booking->check_in,
+            'checkOut' => $booking->check_out,
+            'price' => $booking->total_price,
+        ];
+
+        return response()->json([
+            'message' => 'The room is booked successfully',
+            'booking' => $bookingFormat],
+            200);
     }
 
     /**
@@ -53,7 +69,22 @@ class BookingController extends Controller
      */
     public function show(string $id)
     {
-       
+       $booking = Booking::find($id);
+
+       if (!$booking) {
+        return response()->json(['message' => 'booking not found'], 404);
+       }
+
+       $bookingFormat = [
+        'id' => $booking->id,
+        'userId' => $booking->user_id,
+        'roomId' => $booking->room_id,
+        'checkIn' => $booking->check_in,
+        'checkOut' => $booking->check_out,
+        'price' => $booking->total_price,
+        ];
+
+       return response()->json($bookingFormat, 201);
     }
 
     /**
@@ -95,6 +126,33 @@ class BookingController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $booking = Booking::find($id);
+
+        if (!$booking) {
+            return response()->json(['message' => 'booking not found'], 404);
+        }
+
+        $booking->delete();
+
+        return response()->json(['message' => 'Booking deleted successfully!'], 200); 
+    }
+
+    // Method to get a room associated to a certain booking
+    public function getRoom ($id) {
+
+        $booking = Booking::find($id);
+
+        if (!$booking) {
+            return response()->json(['message' => 'Booking not found'], 404);
+        }
+
+        $roomId = $booking->room_id;
+        $room = Room::find($roomId);
+
+        if (!$room) {
+            return response()->json(['message' => 'Room not found for this booking'], 404);
+        }
+
+        return response()->json($room, 200);
     }
 }
