@@ -6,6 +6,7 @@ use App\Http\Controllers\SignupController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\BookingController;
+use App\Http\Controllers\PaymentController;
 
 // Signup Route
 Route::post('/signup', [SignupController::class, 'store']);
@@ -26,10 +27,13 @@ Route::get('/rooms', [RoomsController::class, 'rooms']);
 Route::get('/rooms/{id}', [RoomsController::class, 'show']);
 
 // Route users
-Route::apiResource('users', UserController::class)->only('index', 'show', 'delete');
+Route::apiResource('users', UserController::class)->only('index', 'show', 'destroy');
 
 // Bookings Route
 Route::apiResource('bookings', BookingController::class);
 
 // Booked room Route
-Route::get('review/{id}', [BookingController::class, 'getRoom']);
+Route::get('bookings/{id}/room', [BookingController::class, 'getRoom']);
+
+// Payment Routes
+Route::apiResource('payments',PaymentController::class);
