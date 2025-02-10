@@ -1,15 +1,5 @@
 import React, { useState } from "react";
-import { Button } from "./ui/button";
-import { cn } from "@/lib/utils";
-import { format } from "date-fns";
-import { CalendarIcon } from "lucide-react";
-import { Calendar } from "@/components/ui/calendar";
 import { IoIosSearch } from "react-icons/io";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
 import {
   Select,
   SelectContent,
@@ -20,16 +10,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-const Filter = ({ search, setSearch }) => {
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
-
-  const isDateDisabled = (date) => {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0); // Remove time part for accurate comparison
-    return date < today;
-  };
-
+const Filter = ({ search, setSearch, setGuests }) => {
   return (
     <>
       <h2 className="text-lg font-medium mb-5 mt-4">Find your perfect Stay</h2>
@@ -43,67 +24,13 @@ const Filter = ({ search, setSearch }) => {
         />
         <IoIosSearch className="absolute top-1/2 left-2 -translate-y-1/2 pr-1 border-r border-red w-7 h-7" />
       </div>
-      <div className="mb-5">
-        <span className="block mb-2 text-sm">check-in date</span>
-        <Popover>
-          <PopoverTrigger asChild>
-            <Button
-              variant={"outline"}
-              className={cn(
-                "w-full justify-start text-left font-normal",
-                !startDate && "text-muted-foreground"
-              )}
-            >
-              <CalendarIcon />
-              {startDate ? format(startDate, "PPP") : <span>Pick a date</span>}
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent className="w-auto p-0">
-            <Calendar
-              mode="single"
-              selected={startDate}
-              onSelect={setStartDate}
-              initialFocus
-              disabled={isDateDisabled}
-              fromDate={new Date()}
-            />
-          </PopoverContent>
-        </Popover>
-      </div>
-      <div className="mb-5">
-        <span className="block mb-2 text-sm">check-out date</span>
-        <Popover>
-          <PopoverTrigger asChild>
-            <Button
-              variant={"outline"}
-              className={cn(
-                "w-full justify-start text-left font-normal",
-                !endDate && "text-muted-foreground"
-              )}
-            >
-              <CalendarIcon />
-              {endDate ? format(endDate, "PPP") : <span>Pick a date</span>}
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent className="w-auto p-0">
-            <Calendar
-              mode="single"
-              selected={endDate}
-              onSelect={setEndDate}
-              initialFocus
-              disabled={isDateDisabled}
-              fromDate={new Date()}
-            />
-          </PopoverContent>
-        </Popover>
-      </div>
       <div>
         <span className="block mb-2 text-sm">guests</span>
         <Select>
           <SelectTrigger>
             <SelectValue placeholder="Select number of guests" />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent onChange={(e) => setGuests(e.target.value)}>
             <SelectGroup>
               <SelectLabel></SelectLabel>
               <SelectItem value="1">1</SelectItem>
