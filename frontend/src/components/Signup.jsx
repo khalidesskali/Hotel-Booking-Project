@@ -89,7 +89,11 @@ const Signup = () => {
         className="bg-white py-8 px-10 rounded-md shadow-md"
         onSubmit={handleSubmit}
       >
-        <h2 className="font-semibold text-4xl text-center mb-5">StayHome</h2>
+        <Link to="/">
+          <h2 className="font-semibold text-4xl text-center mb-5">
+            Stay<span className="text-primary">H</span>ome
+          </h2>
+        </Link>
         <div className="mb-4">
           <label htmlFor="first-name" className="mb-1 block">
             First name
