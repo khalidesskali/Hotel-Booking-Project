@@ -69,9 +69,9 @@ const Login = () => {
 
   return (
     <>
-      <div className="h-screen flex items-center justify-center absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+      <div className="h-screen grid place-content-center">
         <form
-          className="bg-white py-8 px-10 rounded-md shadow-md"
+          className="bg-white p-6 rounded-md shadow-md"
           onSubmit={handleSubmit}
         >
           <Link to="/">

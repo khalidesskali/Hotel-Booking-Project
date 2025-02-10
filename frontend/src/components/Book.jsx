@@ -179,15 +179,15 @@ const Book = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2 bg-white p-6 rounded-lg shadow-md">
             <div
-              className="flex gap-7 items-start border-2 p-4 rounded-md"
+              className="flex md:gap-7 items-start flex-col md:flex-row border-2 p-4 rounded-md"
               style={{ borderColor: "#e7e8e7" }}
             >
               <img
                 src={room.imageSrc}
                 alt={room.roomType}
-                className="w-72 object-cover rounded-md mb-4"
+                className="w-full object-cover rounded-md mb-4 md:w-72"
               />
-              <div className="flex-1">
+              <div className="flex-1 w-full md:w-fit">
                 <h2 className="text-xl font-semibold text-primary mt-4 mb-2">
                   {room.roomType}
                 </h2>

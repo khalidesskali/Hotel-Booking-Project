@@ -81,12 +81,9 @@ const Signup = () => {
   };
 
   return (
-    <div
-      className="absolute left-1/2 -translate-x-1/2 -translate-y-1/2"
-      style={{ top: "52%" }}
-    >
+    <div className="h-screen container mx-auto px-4 grid place-content-center">
       <form
-        className="bg-white py-8 px-10 rounded-md shadow-md"
+        className="bg-white p-6 rounded-md shadow-md"
         onSubmit={handleSubmit}
       >
         <Link to="/">

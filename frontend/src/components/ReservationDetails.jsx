@@ -62,7 +62,7 @@ const ReservationDetails = ({
             </p>
           )}
         </div>
-        <div className="col-start-1 col-end-3">
+        <div className="md:col-start-1 md:col-end-3">
           <label className="block text-sm font-medium mb-1">
             Email Address *
           </label>
