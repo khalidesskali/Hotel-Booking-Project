@@ -32,7 +32,8 @@ const App = () => {
         <Route path="/review/:id" element={<ReviewConfirmation />} />
         <Route path="/payment/:id" element={<Payment />} />
         <Route path="/confirmation" element={<BookingSuccess />} />
-        <Route path="/*" element={<PageNotFound />} />
+        <Route path="/not-found" element={<PageNotFound />} />
+        <Route path="*" element={<PageNotFound />} />
       </Routes>
     </AuthProvider>
   );
