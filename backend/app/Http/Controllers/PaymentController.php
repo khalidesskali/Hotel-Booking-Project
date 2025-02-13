@@ -32,9 +32,8 @@ class PaymentController extends Controller
         // Validate data before creation
         $validateData = $request->validate([
             'bookingId' => 'required|exists:bookings,id',
-            'paymentMethod' => 'required|string|in:credit_card,paypal,cash',
+            'paymentMethod' => 'required|string|in:credit_card,paypal',
             'amount' => 'required|numeric|min:0',
-            'paymentStatus' => 'required|string|in:pending,completed,failed',
         ]);
 
         // Convert camelCase to snake_case before saving to the database
@@ -42,7 +41,6 @@ class PaymentController extends Controller
             'booking_id' => $validateData['bookingId'],
             'payment_method' => $validateData['paymentMethod'],
             'amount' => $validateData['amount'],
-            'payment_status' => $validateData['paymentStatus'],
         ];
 
         // create Payment
@@ -56,7 +54,13 @@ class PaymentController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $payment = Payment::find($id);
+
+        if (!$payment) {
+            return response()->json(['message' => 'payment not found'], 404);
+        }
+
+        return response()->json(['message' => 'payment fetched successfully!'], 200);
     }
 
     /**
