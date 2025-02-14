@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css"; // Import the CSS for the skeleton
@@ -12,12 +12,12 @@ import { Button } from "./ui/button";
 const ReviewConfirmation = () => {
   const [room, setRoom] = useState("");
   const [book, setBook] = useState("");
-  const [status, setStatus] = useState({ status: "" });
   const [loading, setLoading] = useState(true);
+  const [loading2, setLoading2] = useState(false);
+  const [loading3, setLoading3] = useState(false);
 
   const { id } = useParams();
   const navigate = useNavigate();
-  const location = useLocation();
 
   useEffect(() => {
     const fetchRoom = async () => {
@@ -53,30 +53,34 @@ const ReviewConfirmation = () => {
     fetchBook();
   }, []);
 
-  useEffect(() => {
-    const updateStatus = async () => {
-      try {
-        const response = await axios.patch(
-          `http://localhost:8000/api/bookings/${id}`,
-          status
-        );
-        console.log(response.data);
-      } catch (e) {
-        console.error("an error has occured", e);
-      }
-    };
-
-    updateStatus();
-  }, [status]);
-
-  const handleConfirmed = () => {
-    setStatus({ ...status, status: "confirmed" });
-    navigate(`/payment/${id}`);
+  const handleConfirmed = async () => {
+    setLoading3(true);
+    try {
+      const response = await axios.patch(
+        `http://localhost:8000/api/bookings/${id}`,
+        { status: "confirmed" }
+      );
+      navigate(`/payment/${id}`);
+    } catch (e) {
+      console.error("an error has occured", e);
+    } finally {
+      setLoading3(false);
+    }
   };
 
-  const handleCanceled = () => {
-    setStatus({ ...status, status: "canceled" });
-    navigate("/rooms");
+  const handleCanceled = async () => {
+    setLoading2(true);
+    try {
+      const response = await axios.patch(
+        `http://localhost:8000/api/bookings/${id}`,
+        { status: "confirmed" }
+      );
+      navigate("/rooms");
+    } catch (e) {
+      console.error("an error has occured", e);
+    } finally {
+      setLoading2(false);
+    }
   };
 
   return (
@@ -167,7 +171,7 @@ const ReviewConfirmation = () => {
               </div>
               <div className="flex flex-col lg:flex-row items-center gap-4">
                 <Button className="w-full lg:w-fit" onClick={handleConfirmed}>
-                  Confirm Book
+                  {loading2 ? "Confirming..." : "Confirm book"}
                 </Button>
                 <Button
                   className="w-full lg:w-fit"
@@ -176,7 +180,7 @@ const ReviewConfirmation = () => {
                   Update
                 </Button>
                 <Button className="w-full lg:w-fit" onClick={handleCanceled}>
-                  Cancel
+                  {loading3 ? "Cancelling... " : "Cancel"}
                 </Button>
               </div>
             </div>
