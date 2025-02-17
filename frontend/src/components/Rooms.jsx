@@ -41,7 +41,7 @@ const Rooms = () => {
 
   return (
     <div className="flex lg:justify-center flex-col lg:flex-row h-screen">
-      <div className="lg:flex-1 bg-[#f1f1f1] h-fit lg:h-full p-5">
+      <div className="lg:flex-1 bg-[#f1f1f1] h-fit lg:h-screen p-5">
         <Filter search={search} setSearch={setSearch} setGuests={setGuests} />
       </div>
       <div className=" lg:flex-[4] p-5">
@@ -61,7 +61,7 @@ const Rooms = () => {
             </SelectContent>
           </Select>
         </div>
-        <ul className="rooms grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 absolute left-0 lg:relative gap-5 bg-gray-100 p-7 rounded-xl">
+        <ul className="rooms grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 absolute left-0 lg:relative gap-5 bg-gray-100 p-7 rounded-xl">
           {/* {loading
             ? Array.from({ length: 20 }).map((_, index) => (
                 <li
@@ -82,14 +82,14 @@ const Rooms = () => {
             return (
               <li
                 key={room.id}
-                className="flex flex-col lg:flex-row bg-white p-2 rounded-xl"
+                className="flex flex-col bg-white p-2 rounded-xl"
               >
                 <img
                   src={room.imageSrc}
                   alt={room.roomType}
-                  className="rounded-sm w-full h-[300px] lg:h-60 lg:w-96"
+                  className="rounded-sm w-full h-[300px] lg:h-60"
                 />
-                <div className="details p-5">
+                <div className="details p-4">
                   <h3 className="text-2xl font-semibold">{room.roomType}</h3>
                   <p className="text-gray-500 mb-2 text-lg">
                     {room.description}
