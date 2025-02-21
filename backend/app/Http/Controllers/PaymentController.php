@@ -60,7 +60,7 @@ class PaymentController extends Controller
             return response()->json(['message' => 'payment not found'], 404);
         }
 
-        return response()->json(['message' => 'payment fetched successfully!'], 200);
+        return response()->json( $payment, 200);
     }
 
     /**
