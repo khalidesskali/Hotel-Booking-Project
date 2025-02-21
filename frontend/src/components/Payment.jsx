@@ -131,7 +131,8 @@ const Payment = () => {
           paymentType === "credit-card" ? "Credit Card" : "PayPal"
         } Payment Successful!`
       );
-      setTimeout(() => navigate("/confirmation"), 2000);
+      const data = response.data.data;
+      setTimeout(() => navigate(`/confirmation/${data.id}`), 2000);
     } catch (error) {
       console.error("An error has occurred:", error);
       setMessage("Payment failed. Please try again.");

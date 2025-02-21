@@ -31,7 +31,7 @@ const App = () => {
         </Route>
         <Route path="/review/:id" element={<ReviewConfirmation />} />
         <Route path="/payment/:id" element={<Payment />} />
-        <Route path="/confirmation" element={<BookingSuccess />} />
+        <Route path="/confirmation/:id" element={<BookingSuccess />} />
         <Route path="/not-found" element={<PageNotFound />} />
         <Route path="*" element={<PageNotFound />} />
       </Routes>
