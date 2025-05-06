@@ -10,7 +10,7 @@ import PageNotFound from "./components/PageNotFound";
 import Header from "./components/Header";
 import Book from "./components/Book";
 import { AuthProvider } from "./components/AuthProvider";
-import ProtectedAuthRoute from "./components/ProtectedAuthRoute";
+import ProtectedRoute from "./components/ProtectedRoute";
 import BookingSuccess from "./components/BookingSuccess";
 import Payment from "./components/Payment";
 import ReviewConfirmation from "./components/ReviewConfirmation";
@@ -25,13 +25,32 @@ const App = () => {
         <Route path="/rooms/:id" element={<Book />} />
         <Route path="/About" element={<About />} />
         <Route path="/contact" element={<Contact />} />
-        <Route element={<ProtectedAuthRoute />}>
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
-        </Route>
-        <Route path="/review/:id" element={<ReviewConfirmation />} />
-        <Route path="/payment/:id" element={<Payment />} />
-        <Route path="/confirmation/:id" element={<BookingSuccess />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route
+          path="/payment/:id"
+          element={
+            <ProtectedRoute>
+              <Payment />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/confirmation/:id"
+          element={
+            <ProtectedRoute>
+              <BookingSuccess />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/review/:id"
+          element={
+            <ProtectedRoute>
+              <ReviewConfirmation />
+            </ProtectedRoute>
+          }
+        />
         <Route path="/not-found" element={<PageNotFound />} />
         <Route path="*" element={<PageNotFound />} />
       </Routes>
