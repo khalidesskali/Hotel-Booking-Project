@@ -133,8 +133,7 @@
     @apply flex-col gap-8 items-start;
   }
   .auth button:first-child {
-    @apply text-primary py-3 px-4 font-semibold;
-    background-color: transparent;
+    @apply text-gray-700 hover:text-white hover:bg-primary transition-all duration-300 font-semibold;
   }
   @media (min-width: 1025px) {
     nav .nav .links li a {

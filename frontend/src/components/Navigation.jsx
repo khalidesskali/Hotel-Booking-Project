@@ -1,11 +1,8 @@
 import React, { useEffect, useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "./ui/button";
-import { FaBars, FaTimes, FaUserCircle } from "react-icons/fa";
-import { CiUser, CiBookmarkCheck } from "react-icons/ci";
-import { LiaPowerOffSolid } from "react-icons/lia";
+import { FaBars, FaTimes } from "react-icons/fa";
 import { useAuth } from "./AuthProvider";
-import { Avatar } from "./ui/avatar";
 import {
   NavigationMenu,
   NavigationMenuItem,
@@ -13,21 +10,12 @@ import {
   NavigationMenuList,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuShortcut,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import UserMenu from "./UserMenu";
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
   const navRef = useRef();
-  const { user, logout } = useAuth();
+  const { user } = useAuth();
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -83,50 +71,11 @@ const Navigation = () => {
         </NavigationMenu>
         <div className="auth flex justify-center gap-8">
           {user ? (
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Avatar>
-                  <FaUserCircle
-                    fontSize={30}
-                    className="size-full cursor-pointer border border-[#e2e2e2]
-                text-[#2563eb]"
-                  />
-                </Avatar>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuGroup>
-                  <DropdownMenuItem>
-                    <CiUser />
-                    <span>Profile</span>
-                    <DropdownMenuShortcut></DropdownMenuShortcut>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <CiBookmarkCheck fontSize={30} />
-                    <span>My Bookings</span>
-                    <DropdownMenuShortcut></DropdownMenuShortcut>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={logout}>
-                    <LiaPowerOffSolid />
-                    <span>Log out</span>
-                    <DropdownMenuShortcut></DropdownMenuShortcut>
-                  </DropdownMenuItem>
-                </DropdownMenuGroup>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <UserMenu />
           ) : (
-            <>
-              <Button className="w-24 " variant="outline">
-                <Link to="/login">Login</Link>
-              </Button>
-              <Button
-                className="w-24 hover:text-white hover:bg-primary duration-300"
-                variant="outline"
-              >
-                <Link to="/signup">Signup</Link>
-              </Button>
-            </>
+            <Button className="w-24" variant="outline">
+              <Link to="/signup">Signup</Link>
+            </Button>
           )}
         </div>
       </div>
