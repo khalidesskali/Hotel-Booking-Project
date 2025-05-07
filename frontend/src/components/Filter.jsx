@@ -1,66 +1,117 @@
-import React, { useState } from "react";
-import { IoIosSearch } from "react-icons/io";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import React from "react";
+import { Input } from "./ui/input";
+import { Label } from "./ui/label";
+import { FaSearch } from "react-icons/fa";
 
-const Filter = ({ search, setSearch, setGuests }) => {
+const Filter = ({ search, setSearch, priceRange, setPriceRange }) => {
+  const handlePriceChange = (value) => {
+    if (priceRange === value) {
+      // If clicking the same radio button, clear the selection
+      setPriceRange("");
+    } else {
+      setPriceRange(value);
+    }
+  };
+
   return (
-    <>
-      <h2 className="text-lg font-medium mb-5 mt-4">Find your perfect Stay</h2>
-      <div className="search-bar relative w-full mb-5">
-        <input
-          type="text"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          placeholder="Search..."
-          className="pl-10 search-input w-full focus:pl-4"
-        />
-        <IoIosSearch className="absolute top-1/2 left-2 -translate-y-1/2 pr-1 border-r border-red w-7 h-7" />
-      </div>
+    <div className="space-y-6">
       <div>
-        <span className="block mb-2 text-sm">guests</span>
-        <Select>
-          <SelectTrigger>
-            <SelectValue placeholder="Select number of guests" />
-          </SelectTrigger>
-          <SelectContent onChange={(e) => setGuests(e.target.value)}>
-            <SelectGroup>
-              <SelectLabel></SelectLabel>
-              <SelectItem value="1">1</SelectItem>
-              <SelectItem value="2">2</SelectItem>
-              <SelectItem value="3">3</SelectItem>
-              <SelectItem value="4">4</SelectItem>
-            </SelectGroup>
-          </SelectContent>
-        </Select>
+        <h2 className="text-xl font-semibold text-gray-800 mb-4">Filters</h2>
+        <div className="space-y-4">
+          {/* Search Input */}
+          <div className="space-y-2">
+            <Label
+              htmlFor="search"
+              className="text-sm font-medium text-gray-700"
+            >
+              Search Rooms
+            </Label>
+            <div className="relative">
+              <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+              <Input
+                id="search"
+                type="text"
+                placeholder="Search by room type..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="pl-10 bg-gray-50 border-gray-200 focus:border-primary focus:ring-primary"
+              />
+            </div>
+          </div>
+
+          {/* Price Range Radio Buttons */}
+          <div className="space-y-2">
+            <div className="flex items-center justify-between">
+              <Label className="text-sm font-medium text-gray-700">
+                Price Range
+              </Label>
+              {priceRange && (
+                <button
+                  onClick={() => setPriceRange("")}
+                  className="text-sm text-primary hover:text-primary/80 transition-colors"
+                >
+                  Clear
+                </button>
+              )}
+            </div>
+            <div className="space-y-3">
+              <label className="flex items-center gap-2 text-gray-600 hover:text-primary cursor-pointer group">
+                <input
+                  type="radio"
+                  name="price"
+                  value="0-120"
+                  checked={priceRange === "0-120"}
+                  onChange={() => handlePriceChange("0-120")}
+                  className="w-4 h-4 text-primary focus:ring-primary border-gray-300"
+                />
+                <span className="group-hover:text-primary transition-colors">
+                  Less than $120
+                </span>
+              </label>
+              <label className="flex items-center gap-2 text-gray-600 hover:text-primary cursor-pointer group">
+                <input
+                  type="radio"
+                  name="price"
+                  value="120-200"
+                  checked={priceRange === "120-200"}
+                  onChange={() => handlePriceChange("120-200")}
+                  className="w-4 h-4 text-primary focus:ring-primary border-gray-300"
+                />
+                <span className="group-hover:text-primary transition-colors">
+                  $120 to $200
+                </span>
+              </label>
+              <label className="flex items-center gap-2 text-gray-600 hover:text-primary cursor-pointer group">
+                <input
+                  type="radio"
+                  name="price"
+                  value="200-250"
+                  checked={priceRange === "200-250"}
+                  onChange={() => handlePriceChange("200-250")}
+                  className="w-4 h-4 text-primary focus:ring-primary border-gray-300"
+                />
+                <span className="group-hover:text-primary transition-colors">
+                  $200 to $250
+                </span>
+              </label>
+              <label className="flex items-center gap-2 text-gray-600 hover:text-primary cursor-pointer group">
+                <input
+                  type="radio"
+                  name="price"
+                  value="250"
+                  checked={priceRange === "250"}
+                  onChange={() => handlePriceChange("250")}
+                  className="w-4 h-4 text-primary focus:ring-primary border-gray-300"
+                />
+                <span className="group-hover:text-primary transition-colors">
+                  More than $250
+                </span>
+              </label>
+            </div>
+          </div>
+        </div>
       </div>
-      <h2 className="text-lg font-medium my-4">Price per night</h2>
-      <div className="flex flex-col gap-5">
-        <div>
-          <input type="checkbox" className="w-8" name="" id="80" />
-          <label htmlFor="80">Less than $120</label>
-        </div>
-        <div>
-          <input type="checkbox" className="w-8" name="" id="100" />
-          <label htmlFor="100">$120 to $200</label>
-        </div>
-        <div>
-          <input type="checkbox" className="w-8" name="" id="150" />
-          <label htmlFor="150">$200 to $250</label>
-        </div>
-        <div>
-          <input type="checkbox" className="w-8" name="" id="200" />
-          <label htmlFor="200">More than $250</label>
-        </div>
-      </div>
-    </>
+    </div>
   );
 };
 

@@ -3,32 +3,7 @@ import { Button } from "./ui/button";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { FaStar, FaBed, FaWifi, FaSwimmingPool } from "react-icons/fa";
-
-const RoomCardSkeleton = () => {
-  return (
-    <div className="group bg-white rounded-xl overflow-hidden shadow-lg">
-      <div className="relative overflow-hidden">
-        <div className="w-full h-64 bg-gray-200 animate-pulse" />
-      </div>
-      <div className="p-6 max-h-[240px] h-full flex flex-col justify-evenly">
-        <div className="h-8 bg-gray-200 rounded animate-pulse mb-3" />
-        <div className="space-y-2">
-          <div className="h-4 bg-gray-200 rounded animate-pulse" />
-          <div className="h-4 bg-gray-200 rounded animate-pulse w-3/4" />
-        </div>
-        <div className="flex items-center gap-4 my-4">
-          <div className="h-6 w-20 bg-gray-200 rounded animate-pulse" />
-          <div className="h-6 w-20 bg-gray-200 rounded animate-pulse" />
-          <div className="h-6 w-20 bg-gray-200 rounded animate-pulse" />
-        </div>
-        <div className="flex items-center justify-between mt-4">
-          <div className="h-6 w-24 bg-gray-200 rounded animate-pulse" />
-          <div className="h-10 w-32 bg-gray-200 rounded animate-pulse" />
-        </div>
-      </div>
-    </div>
-  );
-};
+import RoomCardSkeleton from "./RoomCardSkeleton";
 
 const FeaturedRooms = ({ title, description }) => {
   const [rooms, setRooms] = useState([]);
