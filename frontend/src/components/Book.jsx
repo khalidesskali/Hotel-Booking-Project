@@ -5,6 +5,7 @@ import { PiBathtubLight } from "react-icons/pi";
 import { CiUser } from "react-icons/ci";
 import { LiaBedSolid } from "react-icons/lia";
 import { IoIosResize } from "react-icons/io";
+import { FaCheckCircle } from "react-icons/fa";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css"; // Import the CSS for the skeleton
 import { format } from "date-fns";
@@ -39,6 +40,7 @@ const Book = () => {
     checkIn: false,
     checkOut: false,
   });
+  const [showSuccess, setShowSuccess] = useState(false);
 
   // Fetch signle room data
   useEffect(() => {
@@ -126,11 +128,9 @@ const Book = () => {
 
     if (!phone || !startDate || !endDate) return;
 
-    // Convert dates immediately
     const formattedStartDate = formatDate(startDate);
     const formattedEndDate = formatDate(endDate);
 
-    // Create a new data object to ensure correct values are sent
     const payload = {
       ...data,
       check_in: formattedStartDate,
@@ -144,9 +144,12 @@ const Book = () => {
         "http://localhost:8000/api/bookings",
         payload
       );
-      alert("The room booked successfully");
-      const data = response.data;
-      navigate(`/review/${data.booking.id}`);
+      setShowSuccess(true);
+      // Wait for 2 seconds to show the success message before redirecting
+      setTimeout(() => {
+        const data = response.data;
+        navigate(`/review/${data.booking.id}`);
+      }, 2000);
     } catch (e) {
       console.error("An error has occurred", e);
     } finally {
@@ -155,102 +158,142 @@ const Book = () => {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      {loading ? (
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-2 bg-white p-6 rounded-lg shadow-md">
-            <Skeleton height={200} />
-            <Skeleton count={3} style={{ margin: "1rem 0" }} />
-            <Skeleton height={150} style={{ margin: "2rem 0" }} />
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <Skeleton height={50} />
-              <Skeleton height={50} />
-              <Skeleton height={50} />
-              <Skeleton height={50} />
-              <Skeleton height={50} />
-              <Skeleton height={50} />
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
+      <div className="container mx-auto px-4 py-12">
+        {/* Success Toast */}
+        {showSuccess && (
+          <div className="fixed top-4 right-4 z-50 animate-slide-in">
+            <div className="bg-green-50 border border-green-200 rounded-lg shadow-lg p-4 flex items-center gap-3">
+              <FaCheckCircle className="text-green-500 text-xl" />
+              <div>
+                <h4 className="font-semibold text-green-800">
+                  Booking Successful!
+                </h4>
+                <p className="text-green-600 text-sm">
+                  Redirecting to review page...
+                </p>
+              </div>
             </div>
           </div>
-          <div className="bg-white p-6 rounded-lg shadow-md">
-            <Skeleton height={300} />
+        )}
+
+        {loading ? (
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="lg:col-span-2 bg-white p-8 rounded-2xl shadow-lg">
+              <Skeleton height={300} className="rounded-xl mb-6" />
+              <Skeleton count={3} className="mb-4" />
+              <Skeleton height={200} className="rounded-xl mb-8" />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <Skeleton height={60} className="rounded-lg" />
+                <Skeleton height={60} className="rounded-lg" />
+                <Skeleton height={60} className="rounded-lg" />
+                <Skeleton height={60} className="rounded-lg" />
+              </div>
+            </div>
+            <div className="bg-white p-8 rounded-2xl shadow-lg">
+              <Skeleton height={400} className="rounded-xl" />
+            </div>
           </div>
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-2 bg-white p-6 rounded-lg shadow-md">
-            <div
-              className="flex md:gap-7 items-start flex-col md:flex-row border-2 p-4 rounded-md"
-              style={{ borderColor: "#e7e8e7" }}
-            >
-              <img
-                src={room.imageSrc}
-                alt={room.roomType}
-                className="w-full object-cover rounded-md mb-4 md:w-72"
-              />
-              <div className="flex-1 w-full md:w-fit">
-                <h2 className="text-xl font-semibold text-primary mt-4 mb-2">
-                  {room.roomType}
-                </h2>
-                <p className="text-gray-600 mb-4">{room.description}</p>
-                <div className="flex items-center justify-between gap-7 font-medium text-gray-700 mb-6 text-sm">
-                  <div className="flex flex-col items-center gap-2">
-                    <span className="text-gray-600">Beds</span>
-                    <div className="flex gap-2 text-sm">
-                      <span>{room.bed}</span>
-                      <LiaBedSolid className="text-xl" />
+        ) : (
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="lg:col-span-2 space-y-8">
+              {/* Room Details Card */}
+              <div className="bg-white p-8 rounded-2xl shadow-lg border border-gray-100">
+                <div className="flex md:gap-8 items-start flex-col md:flex-row">
+                  <div className="relative w-full md:w-80">
+                    <img
+                      src={room.imageSrc}
+                      alt={room.roomType}
+                      className="w-full h-64 object-cover rounded-xl shadow-md"
+                    />
+                    <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-4 py-2 rounded-full text-primary font-semibold shadow-sm">
+                      ${room.price}/night
                     </div>
                   </div>
-                  <div className="flex flex-col items-center gap-2">
-                    <span className="text-gray-600">Area</span>
-                    <div className="flex gap-2 text-sm">
-                      <span>{room.area}</span>
-                      <IoIosResize className="text-xl" />
-                    </div>
-                  </div>
-                  <div className="flex flex-col items-center gap-2">
-                    <span className="text-gray-600">Guests</span>
-                    <div className="flex gap-2 text-sm">
-                      <span>{room.guests}</span>
-                      <CiUser className="text-xl" />
-                    </div>
-                  </div>
-                  <div className="flex flex-col items-center gap-2">
-                    <span className="text-gray-600">Bathrooms</span>
-                    <div className="flex gap-2 text-sm">
-                      <span>{room.bathroom}</span>
-                      <PiBathtubLight className="text-xl" />
+                  <div className="flex-1 mt-6 md:mt-0">
+                    <h2 className="text-2xl font-bold text-primary mb-3">
+                      {room.roomType}
+                    </h2>
+                    <p className="text-gray-600 mb-6 leading-relaxed">
+                      {room.description}
+                    </p>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+                      <div className="flex flex-col items-center p-4 bg-gray-50 rounded-xl">
+                        <span className="text-gray-600 text-sm mb-2">Beds</span>
+                        <div className="flex items-center gap-2">
+                          <span className="font-medium">{room.bed}</span>
+                          <LiaBedSolid className="text-xl text-primary" />
+                        </div>
+                      </div>
+                      <div className="flex flex-col items-center p-4 bg-gray-50 rounded-xl">
+                        <span className="text-gray-600 text-sm mb-2">Area</span>
+                        <div className="flex items-center gap-2">
+                          <span className="font-medium">{room.area}</span>
+                          <IoIosResize className="text-xl text-primary" />
+                        </div>
+                      </div>
+                      <div className="flex flex-col items-center p-4 bg-gray-50 rounded-xl">
+                        <span className="text-gray-600 text-sm mb-2">
+                          Guests
+                        </span>
+                        <div className="flex items-center gap-2">
+                          <span className="font-medium">{room.guests}</span>
+                          <CiUser className="text-xl text-primary" />
+                        </div>
+                      </div>
+                      <div className="flex flex-col items-center p-4 bg-gray-50 rounded-xl">
+                        <span className="text-gray-600 text-sm mb-2">
+                          Bathrooms
+                        </span>
+                        <div className="flex items-center gap-2">
+                          <span className="font-medium">{room.bathroom}</span>
+                          <PiBathtubLight className="text-xl text-primary" />
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
+
+              {/* Room Details Section */}
+              <div className="bg-white p-8 rounded-2xl shadow-lg border border-gray-100">
+                <h3 className="text-xl font-bold text-gray-800 mb-4">
+                  Good to know
+                </h3>
+                <p className="text-gray-600 leading-relaxed">{room.details}</p>
+              </div>
+
+              {/* Reservation Details */}
+              <div className="bg-white p-8 rounded-2xl shadow-lg border border-gray-100">
+                <ReservationDetails
+                  userData={userData}
+                  error={error}
+                  startDate={startDate}
+                  setStartDate={setStartDate}
+                  endDate={endDate}
+                  setEndDate={setEndDate}
+                  phone={phone}
+                  setPhone={setPhone}
+                  format={format}
+                />
+              </div>
             </div>
-            <div className="mb-10">
-              <h3 className="text-lg font-bold mb-2 mt-10">Good to know:</h3>
-              <p>{room.details}</p>
+
+            {/* Reservation Summary */}
+            <div className="lg:sticky lg:top-8">
+              <ReservationSummary
+                startDate={startDate}
+                endDate={endDate}
+                handleClick={handleClick}
+                loading2={loading2}
+                calculateDateDifference={calculateDateDifference}
+                format={format}
+                data={data}
+              />
             </div>
-            <ReservationDetails
-              userData={userData}
-              error={error}
-              startDate={startDate}
-              setStartDate={setStartDate}
-              endDate={endDate}
-              setEndDate={setEndDate}
-              phone={phone}
-              setPhone={setPhone}
-              format={format}
-            />
           </div>
-          <ReservationSummary
-            startDate={startDate}
-            endDate={endDate}
-            handleClick={handleClick}
-            loading2={loading2}
-            calculateDateDifference={calculateDateDifference}
-            format={format}
-            data={data}
-          />
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 };

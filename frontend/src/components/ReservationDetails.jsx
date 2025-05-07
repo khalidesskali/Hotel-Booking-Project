@@ -1,5 +1,5 @@
 import React from "react";
-import { CalendarIcon } from "lucide-react";
+import { CalendarIcon, User, Phone, Mail } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
 import {
   Popover,
@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/popover";
 import { Button } from "./ui/button";
 import { cn } from "@/lib/utils";
+import { motion } from "framer-motion";
 
 const ReservationDetails = ({
   userData,
@@ -22,7 +23,7 @@ const ReservationDetails = ({
 }) => {
   const isDateDisabled = (date) => {
     const today = new Date();
-    today.setHours(0, 0, 0, 0); // Remove time part for accurate comparison
+    today.setHours(0, 0, 0, 0);
     return date < today;
   };
 
@@ -30,73 +31,119 @@ const ReservationDetails = ({
   minDate.setDate(minDate.getDate() + 1);
 
   return (
-    <div className="lg:col-span-3  rounded-lg">
-      <h3 className="text-lg font-bold mb-4">Enter your details</h3>
-      <form className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div>
-          <label className="block text-sm font-medium mb-1">Full Name *</label>
-          <input
-            type="text"
-            className="w-full border border-gray-300 rounded-lg px-3 py-2"
-            placeholder="Enter your first name"
-            value={userData.fullName}
-            readOnly
-          />
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      className="lg:col-span-3 rounded-xl bg-white p-6 shadow-sm border border-gray-100"
+    >
+      <div className="flex items-center gap-3 mb-6">
+        <div className="p-2 bg-primary/10 rounded-lg">
+          <User className="text-primary h-5 w-5" />
         </div>
-        <div>
-          <label className="block text-sm font-medium mb-1">
+        <h3 className="text-xl font-bold text-gray-800">Enter your details</h3>
+      </div>
+
+      <form className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="space-y-2">
+          <label className="block text-sm font-medium text-gray-700">
+            Full Name *
+          </label>
+          <div className="relative">
+            <input
+              type="text"
+              className="w-full border border-gray-200 rounded-lg px-4 py-2.5 pl-10 
+                focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary
+                transition-all duration-200 bg-gray-50"
+              placeholder="Enter your first name"
+              value={userData.fullName}
+              readOnly
+            />
+            <User className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-4 w-4" />
+          </div>
+        </div>
+
+        <div className="space-y-2">
+          <label className="block text-sm font-medium text-gray-700">
             Phone Number *
           </label>
-          <input
-            type="number"
-            className={`w-full border rounded-lg px-3 py-2 ${
-              error.phone ? "border-red-600" : "border-gray-300"
-            }`}
-            placeholder="Enter your phone number"
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
-          />
+          <div className="relative">
+            <input
+              type="number"
+              className={cn(
+                "w-full border rounded-lg px-4 py-2.5 pl-10 focus:outline-none focus:ring-2",
+                "transition-all duration-200",
+                error.phone
+                  ? "border-red-500 focus:ring-red-200 focus:border-red-500"
+                  : "border-gray-200 focus:ring-primary/20 focus:border-primary"
+              )}
+              placeholder="Enter your phone number"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+            />
+            <Phone className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-4 w-4" />
+          </div>
           {error.phone && (
-            <p className="text-red-600 text-sm mr-2 mt-1">
+            <p className="text-red-500 text-sm mt-1 flex items-center gap-1">
+              <span className="text-red-500">•</span>
               This field must be filled
             </p>
           )}
         </div>
-        <div className="md:col-start-1 md:col-end-3">
-          <label className="block text-sm font-medium mb-1">
+
+        <div className="md:col-span-2 space-y-2">
+          <label className="block text-sm font-medium text-gray-700">
             Email Address *
           </label>
-          <input
-            type="email"
-            className="w-full border border-gray-300 rounded-lg px-3 py-2"
-            placeholder="Enter your email address"
-            value={userData.email}
-            readOnly
-          />
+          <div className="relative">
+            <input
+              type="email"
+              className="w-full border border-gray-200 rounded-lg px-4 py-2.5 pl-10 
+                focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary
+                transition-all duration-200 bg-gray-50"
+              placeholder="Enter your email address"
+              value={userData.email}
+              readOnly
+            />
+            <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-4 w-4" />
+          </div>
         </div>
-        <div>
-          <label className="block text-sm font-medium mb-1">From *</label>
+
+        <div className="space-y-2">
+          <label className="block text-sm font-medium text-gray-700">
+            Check-in Date *
+          </label>
           <Popover>
             <PopoverTrigger asChild>
               <Button
                 variant={"outline"}
                 className={cn(
-                  "w-full justify-start text-left font-normal",
-                  !startDate && "text-muted-foreground",
-                  error.checkIn ? "border-red-600" : "border-input"
+                  "w-full justify-start text-left font-normal h-11 px-4",
+                  "border-gray-200 hover:bg-gray-50 transition-all duration-200",
+                  !startDate && "text-gray-500",
+                  error.checkIn
+                    ? "border-red-500 focus:ring-2 focus:ring-red-200"
+                    : "focus:ring-2 focus:ring-primary/20 focus:border-primary"
                 )}
               >
-                <CalendarIcon className={error.checkIn ? "text-red-600" : ""} />
+                <CalendarIcon
+                  className={cn(
+                    "mr-2 h-4 w-4",
+                    error.checkIn ? "text-red-500" : "text-gray-500"
+                  )}
+                />
                 {startDate ? (
                   format(startDate, "PPP")
                 ) : (
-                  <span className={error.checkIn ? "text-red-600" : ""}>
+                  <span
+                    className={error.checkIn ? "text-red-500" : "text-gray-500"}
+                  >
                     Pick a date
                   </span>
                 )}
               </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-auto p-0">
+            <PopoverContent className="w-auto p-0 shadow-lg border border-gray-100 rounded-xl">
               <Calendar
                 mode="single"
                 selected={startDate}
@@ -107,35 +154,49 @@ const ReservationDetails = ({
                 initialFocus
                 disabled={isDateDisabled}
                 fromDate={new Date()}
+                className="rounded-xl"
               />
             </PopoverContent>
           </Popover>
         </div>
-        <div>
-          <label className="block text-sm font-medium mb-1">Until *</label>
+
+        <div className="space-y-2">
+          <label className="block text-sm font-medium text-gray-700">
+            Check-out Date *
+          </label>
           <Popover>
             <PopoverTrigger asChild>
               <Button
                 variant={"outline"}
                 className={cn(
-                  "w-full justify-start text-left font-normal",
-                  !endDate && "text-muted-foreground",
-                  error.checkOut ? "border-red-600" : "border-input"
+                  "w-full justify-start text-left font-normal h-11 px-4",
+                  "border-gray-200 hover:bg-gray-50 transition-all duration-200",
+                  !endDate && "text-gray-500",
+                  error.checkOut
+                    ? "border-red-500 focus:ring-2 focus:ring-red-200"
+                    : "focus:ring-2 focus:ring-primary/20 focus:border-primary"
                 )}
               >
                 <CalendarIcon
-                  className={error.checkOut ? "text-red-600" : ""}
+                  className={cn(
+                    "mr-2 h-4 w-4",
+                    error.checkOut ? "text-red-500" : "text-gray-500"
+                  )}
                 />
                 {endDate ? (
                   format(endDate, "PPP")
                 ) : (
-                  <span className={error.checkOut ? "text-red-600" : ""}>
+                  <span
+                    className={
+                      error.checkOut ? "text-red-500" : "text-gray-500"
+                    }
+                  >
                     Pick a date
                   </span>
                 )}
               </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-auto p-0">
+            <PopoverContent className="w-auto p-0 shadow-lg border border-gray-100 rounded-xl">
               <Calendar
                 mode="single"
                 selected={endDate}
@@ -143,12 +204,13 @@ const ReservationDetails = ({
                 initialFocus
                 disabled={isDateDisabled}
                 fromDate={minDate}
+                className="rounded-xl"
               />
             </PopoverContent>
           </Popover>
         </div>
       </form>
-    </div>
+    </motion.div>
   );
 };
 
