@@ -84,32 +84,40 @@ const FeaturedRooms = ({ title, description }) => {
                     </div>
                   </div>
 
-                  <div className="p-6 max-h-[240px] h-full flex flex-col justify-evenly">
-                    <h3 className="text-2xl font-bold text-gray-800 mb-3">
-                      {room.roomType}
-                    </h3>
-                    <p className="text-gray-600 mb-4 line-clamp-2">
-                      {room.description}
-                    </p>
+                  <div className="p-6 2xl:max-h-[240px] 2xl:h-full flex flex-col">
+                    <div className="flex-grow">
+                      <h3 className="text-2xl font-bold text-gray-800 mb-3">
+                        {room.roomType}
+                      </h3>
+                      <div className="h-[48px] mb-4">
+                        <p className="text-gray-600 line-clamp-2">
+                          {room.description}
+                        </p>
+                      </div>
 
-                    <div className="flex items-center gap-4 mb-6">
-                      <div className="flex items-center gap-1">
-                        <FaBed className="text-primary" />
-                        <span className="text-sm text-gray-600">King Bed</span>
-                      </div>
-                      <div className="flex items-center gap-1">
-                        <FaWifi className="text-primary" />
-                        <span className="text-sm text-gray-600">Free WiFi</span>
-                      </div>
-                      <div className="flex items-center gap-1">
-                        <FaSwimmingPool className="text-primary" />
-                        <span className="text-sm text-gray-600">
-                          Pool Access
-                        </span>
+                      <div className="flex items-center gap-4 mb-6">
+                        <div className="flex items-center gap-1">
+                          <FaBed className="text-primary" />
+                          <span className="text-sm text-gray-600">
+                            King Bed
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <FaWifi className="text-primary" />
+                          <span className="text-sm text-gray-600">
+                            Free WiFi
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <FaSwimmingPool className="text-primary" />
+                          <span className="text-sm text-gray-600">
+                            Pool Access
+                          </span>
+                        </div>
                       </div>
                     </div>
 
-                    <div className="flex items-center justify-between">
+                    <div className="flex items-center justify-between mt-auto">
                       <div className="flex items-center gap-1">
                         <FaStar className="text-yellow-400" />
                         <span className="font-medium">4.9</span>
